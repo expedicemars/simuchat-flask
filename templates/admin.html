@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% block content %}
+
+<h1>Admin sekce komunikace</h1>
+<form method="post">
+    <textarea name="jmena_posadky", rows="5">{{jmena_posadky}}</textarea>
+    <button type="submit" name="save" value="whatever">Uložit</button><br>
+    <label for="admin_name">Jméno komunikujícího admina</label>
+    <input id="admin_name" type="text" name="admin_name">
+    <button type="submit" name="join" value="whatever">Připojit se</button>
+</form>
+
+{% endblock %}

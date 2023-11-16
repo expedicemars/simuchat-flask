@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+{% block content %}
+
+<h1>Komunikační okno</h1>
+<div id="messages"></div>
+<input type="text" placeholder="komunikujete jako {{komunikacni_jmeno}}" id="message">
+<button onclick="sendMessage()">Odeslat</button>
+
+
+<script type="text/javascript">
+    let socketio = io()
+
+    let messages = document.getElementById("messages")
+
+    function createMessage(name, msg) {
+        let new_message = `
+        <div>
+            <strong>${name}</strong>: ${msg} at ${new Date().toLocaleString()}
+        </div>
+        `
+        messages.innerHTML += new_message
+    }
+
+    socketio.on("message", (data) => {
+        createMessage(data.name, data.message)
+    })
+
+    function sendMessage() {
+        message_input = document.getElementById("message")
+        if (message_input.value == "") return
+        socketio.emit("message", {data: message_input.value})
+        message_input.value = ""
+    }
+</script>
+{% endblock %}
