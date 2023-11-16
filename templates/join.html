@@ -1,12 +1,12 @@
 {% extends "index.html" %}
 {% block content %}
-
-<h1>Komunikace EM</h1>
-<p>připojit jako:</p>
-<form method="post">
-    {% for jmeno in jmena_posadky %}
-        <button value={{jmeno}} name="jmeno">{{jmeno}}</button>
-    {% endfor %}
-</form>
+    <h1 class="heading">EMC komunikace</h1>
+    
+    <p class="join-as">připojit se jako:</p>
+    <form method="post">
+        {% for jmeno in jmena_posadky %}
+            <button class="btn custom-button my-2" value={{jmeno}} name="jmeno">{{jmeno}}</button><br>
+        {% endfor %}
+    </form>
 
 {% endblock %}

@@ -1,0 +1,28 @@
+html{
+    height: 100%;
+}
+
+body{
+    background-color: #B65900;
+    color: #B65900;
+    height: 100%;
+    min-height: fit-content;
+    font-family: 'Courier New', Courier, monospace;
+}
+.main{
+    background-color: black;
+    min-height: fit-content;
+    height: calc(100% - 3rem);
+
+}
+.custom-button{
+    background-color: #B65900;
+    min-width: 150px;
+    font-weight: bold;
+}
+h1{
+    font-weight: bold;
+}
+.join-as{
+    font-weight: bold;
+}

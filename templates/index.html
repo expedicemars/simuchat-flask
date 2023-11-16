@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EM Komunikace</title>
-    <!-- <script src="{{url_for('static', filename='socketio_downloaded.js')}}"></script> -->
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{url_for('static', filename='socketio_downloaded.js')}}"></script>
+    <script src="{{url_for('static', filename='bootstrap.bundle.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 </head>
-<body>
-    {% block content %}
-    {% endblock %}
+<body class="p-4">
+    <section class="border rounded-3 border-dark border-2 main p-3 text-center h-100">
+        {% block content %}
+        {% endblock %}
+    </section>
 </body>
 </html>
