@@ -87,6 +87,11 @@ def message(data):
     content = {"name": session.get("jmeno"), "message": data["data"]}
     send(content , broadcast=True)
 
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("not_found.html")
+
+
             
 if __name__ == '__main__':
     socketio.run(app, debug=True)

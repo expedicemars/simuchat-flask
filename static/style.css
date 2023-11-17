@@ -85,3 +85,12 @@ h1{
     border-color:cornflowerblue;
     color: #B65900;
 }
+.link{
+    color:#B65900;
+    font-weight: bold;
+}
+.link:hover{
+    color:#B65900;
+    font-weight: bold;
+    text-decoration: none;
+}
