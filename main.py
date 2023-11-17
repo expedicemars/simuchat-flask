@@ -38,17 +38,32 @@ def chat():
         return redirect(url_for("join"))
     return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"))
 
+@app.route("/admin_login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "GET":
+        return render_template("admin_login.html")
+    else:
+        if request.form.get("heslo") == "hroch314":
+            session["admin"] = True
+            return redirect(url_for("admin"))
+        else:
+            return redirect(url_for("admin_login"))
+
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
-    session.clear()
     if request.method == "GET":
-        return render_template("admin.html", jmena_posadky = get_jmena_posadky_for_admin())
+        if not session.get("admin"):
+            return redirect(url_for("admin_login"))
+        else:
+            session.clear()
+            session["admin"] = True
+            return render_template("admin.html", jmena_posadky = get_jmena_posadky_for_admin())
     else:
         if request.form.get("save"):
             set_jmena_posadky_from_admin(request.form.get("jmena_posadky"))
             return redirect(url_for("admin"))
-        elif request.form.get("join"):
+        elif request.form.get("admin_name"):
             session["jmeno"] = f"{request.form.get('admin_name')}@EMC"
             return redirect(url_for("chat"))
         

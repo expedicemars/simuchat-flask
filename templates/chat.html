@@ -1,10 +1,16 @@
 {% extends "index.html" %}
 {% block content %}
 
-<h1>Komunikační okno</h1>
-<div id="messages"></div>
-<input type="text" placeholder="komunikujete jako {{komunikacni_jmeno}}" id="message">
-<button onclick="sendMessage()">Odeslat</button>
+<h1>Komunikujete jako {{komunikacni_jmeno}}</h1>
+<div id="messages" class="messages rounded-3 my-3"></div>
+<div class="inputs row">
+    <div class="col">
+        <input type="text" id="message" class="form-control text-input">
+    </div>
+    <div class="col-auto">
+        <button onclick="sendMessage()" class="btn custom-button">Odeslat</button>
+    </div>
+</div>
 
 
 <script type="text/javascript">
@@ -14,8 +20,16 @@
 
     function createMessage(name, msg) {
         let new_message = `
-        <div>
-            <strong>${name}</strong>: ${msg} at ${new Date().toLocaleString()}
+        <div class="message">
+            <span class="name">
+                ${name}
+            </span>
+            <span class="text">
+                ${msg}
+            </span>
+            <span class="date">
+                ${new Date().toLocaleString()}
+            </span>
         </div>
         `
         messages.innerHTML += new_message
@@ -30,6 +44,14 @@
         if (message_input.value == "") return
         socketio.emit("message", {data: message_input.value})
         message_input.value = ""
+    }
+
+    document.getElementById("message").addEventListener("keydown", handleKeyPress)
+
+    function handleKeyPress(event) {
+        if (event.key == "Enter") {
+            sendMessage()
+        } 
     }
 </script>
 {% endblock %}
