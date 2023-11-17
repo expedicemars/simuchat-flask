@@ -11,56 +11,8 @@
         <button onclick="sendMessage()" class="btn custom-button">Odeslat</button>
     </div>
 </div>
+<input type="text" hidden id="messages_input" value="{{messages}}">
 
-
-<script type="text/javascript">
-    let socketio = io()
-
-    let messages = document.getElementById("messages")
-
-    function createMessage(name, text, time) {
-        let new_message = `
-        <div class="message">
-            <span class="name">
-                ${name}
-            </span>
-            <span class="text">
-                ${text}
-            </span>
-            <span class="date">
-                ${time}
-            </span>
-        </div>
-        `
-        messages.innerHTML += new_message
-        messages.scrollTop = messages.scrollHeight
-    }
-
-    socketio.on("message", (data) => {
-        createMessage(data.name, data.text, data.time)
-    })
-
-    function sendMessage() {
-        message_input = document.getElementById("message")
-        if (message_input.value == "") return
-        socketio.emit("message", {data: message_input.value})
-        message_input.value = ""
-    }
-
-    document.getElementById("message").addEventListener("keydown", handleKeyPress)
-
-    function handleKeyPress(event) {
-        if (event.key == "Enter") {
-            sendMessage()
-        } 
-    }
-</script>
-
-{% for message in messages %}
-    <script type="text/javascript">
-        createMessage("{{message.name}}", "{{message.text}}", "{{message.time}}")
-    </script>
-{% endfor %}
-
+<script type="module" src="{{url_for('static', filename='chat.js')}}"></script>
 
 {% endblock %}
