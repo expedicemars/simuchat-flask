@@ -44,9 +44,9 @@ def new_message(name, text) -> None:
     
     send(message, broadcast=True)
     
-def get_messages() -> list[dict]:
+def get_raw_messages() -> str:
     with open(messages_path) as file:
-        return json.load(file)
+        return file.read()
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -64,7 +64,7 @@ def join():
 def chat():
     if not session.get("jmeno"):
         return redirect(url_for("join"))
-    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = get_messages())
+    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = get_raw_messages())
 
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
