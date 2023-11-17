@@ -18,25 +18,26 @@
 
     let messages = document.getElementById("messages")
 
-    function createMessage(name, msg) {
+    function createMessage(name, text, time) {
         let new_message = `
         <div class="message">
             <span class="name">
                 ${name}
             </span>
             <span class="text">
-                ${msg}
+                ${text}
             </span>
             <span class="date">
-                ${new Date().toLocaleString()}
+                ${time}
             </span>
         </div>
         `
         messages.innerHTML += new_message
+        messages.scrollTop = messages.scrollHeight
     }
 
     socketio.on("message", (data) => {
-        createMessage(data.name, data.message)
+        createMessage(data.name, data.text, data.time)
     })
 
     function sendMessage() {
@@ -54,4 +55,12 @@
         } 
     }
 </script>
+
+{% for message in messages %}
+    <script type="text/javascript">
+        createMessage("{{message.name}}", "{{message.text}}", "{{message.time}}")
+    </script>
+{% endfor %}
+
+
 {% endblock %}

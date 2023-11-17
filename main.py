@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, send
+from pathlib import Path
+from datetime import datetime
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
+messages_path = Path.cwd() / "messages.json"
 
 
 def get_jmena_posadky_for_admin() ->str:
@@ -19,6 +23,30 @@ def set_jmena_posadky_from_admin(data) -> None:
 def get_jmena_posadky_for_user() ->list[str]:
     with open("jmena_posadky.txt") as file:
         return file.read().split("\n")
+
+def create_messages_file() -> None:
+    if not messages_path.exists():
+        messages_path.touch()
+        with open(messages_path, "w") as file:
+            file.write(json.dumps([], indent=4))
+        
+def new_message(name, text) -> None:
+    message = {
+        "name": name,
+        "text": text,
+        "time": str(datetime.now())
+    }
+    with open(messages_path) as file:
+        messages = json.load(file)
+    messages.append(message)
+    with open(messages_path, "w") as file:
+        file.write(json.dumps(messages, indent=4))
+    
+    send(message, broadcast=True)
+    
+def get_messages() -> list[dict]:
+    with open(messages_path) as file:
+        return json.load(file)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -36,7 +64,7 @@ def join():
 def chat():
     if not session.get("jmeno"):
         return redirect(url_for("join"))
-    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"))
+    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = get_messages())
 
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
@@ -70,22 +98,18 @@ def admin():
 
 @socketio.on("connect")
 def connect():
-    jmeno = session.get("jmeno")
-    print(f"connected {jmeno}")
-    send({"name": session.get("jmeno"), "message": "joinnul."}, broadcast=True)
+    new_message(session.get("jmeno"), "joined.")
 
 
 @socketio.on("disconnect")
 def disconnect():
-    jmeno = session.get("jmeno")
-    print(f"disconnected {jmeno}")
-    send({"name": session.get("jmeno"), "message": "se odpojil."}, broadcast=True)
+    new_message(session.get("jmeno"), "disconnected.")
 
 
 @socketio.on("message")
 def message(data):
-    content = {"name": session.get("jmeno"), "message": data["data"]}
-    send(content , broadcast=True)
+    new_message(session.get("jmeno"), data["data"])
+
 
 @app.errorhandler(404)
 def not_found(e):
@@ -94,4 +118,5 @@ def not_found(e):
 
             
 if __name__ == '__main__':
+    create_messages_file()
     socketio.run(app, debug=True)
