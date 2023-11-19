@@ -59,6 +59,17 @@ h1{
     margin-left: auto;
     white-space: nowrap;
 }
+.message-connection{
+    color: green;
+}
+.message-org{
+    color: greenyellow;
+    font-weight: bold;
+}
+.message-posadka{
+    color: #FFA52E;
+    font-weight: bold;
+}
 .form{
     display: flex;
     align-items: center;

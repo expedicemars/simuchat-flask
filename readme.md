@@ -7,6 +7,17 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 - upozornění na novou zprávu
 - postupné archivování konverzace
 
+## Použití
+
+### Posádka
+
+- navštíví IP serveru `/` a zvolí jméno komunikujícího
+
+### Organizátoři
+
+- navštíví IP serveru `/admin` a zadají heslo `hroch314`
+- nastaví jména členů posádky, začátek simulace, 
+
 
 ## Kroky pro spuštění
 
@@ -18,5 +29,6 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 
 - Flask
 - Flask-SocketIO
+- natvrdo stažený bootstrap a socketio.js proto, aby server fungoval zcela bez internetu.
 
 by Josef Lát

@@ -5,24 +5,31 @@ from datetime import datetime
 import json
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+app.config['SECRET_KEY'] = 'sprcha-je-jen-ochoceny-vodopad'
 socketio = SocketIO(app)
 messages_path = Path.cwd() / "messages.json"
+settings_path = Path.cwd() / "settings.json"
 
 
-def get_jmena_posadky_for_admin() ->str:
-    with open("jmena_posadky.txt") as file:
-        return file.read()
+def get_jmena_posadky_for_admin() -> str:
+    with open(settings_path) as file:
+        file = json.load(file)
+        return "\n".join(file["jmena_posadky"])
 
 
 def set_jmena_posadky_from_admin(data) -> None:
-    with open("jmena_posadky.txt", "w") as file:
-        file.write(data)
+    with open(settings_path) as file:
+        settings = json.load(file)
+    settings["jmena_posadky"] = data.split("\n")
+    with open(settings_path, "w") as file:
+        file.write(json.dumps(settings, indent=4))
 
 
 def get_jmena_posadky_for_user() ->list[str]:
-    with open("jmena_posadky.txt") as file:
-        return file.read().split("\n")
+    with open(settings_path) as file:
+        settings = json.load(file)
+        return settings["jmena_posadky"]
+
 
 def create_messages_file() -> None:
     if not messages_path.exists():
@@ -30,11 +37,13 @@ def create_messages_file() -> None:
         with open(messages_path, "w") as file:
             file.write(json.dumps([], indent=4))
         
-def new_message(name, text) -> None:
+        
+def new_message(name, text, type) -> None: # 3 typy: org, posadka, connection
     message = {
         "name": name,
         "text": text,
-        "time": str(datetime.now())
+        "time": str(datetime.now()),
+        "type": type
     }
     with open(messages_path) as file:
         messages = json.load(file)
@@ -47,6 +56,19 @@ def new_message(name, text) -> None:
 def get_raw_messages() -> str:
     with open(messages_path) as file:
         return file.read()
+
+def get_settings() -> dict:
+    with open(settings_path) as file:
+        return json.load(file)
+    
+def set_settings(settings: dict) -> None:
+    with open(settings_path, "w") as file:
+        file.write(json.dumps(settings, indent=4))
+
+def set_pocet_zprav(pocet_zprav: int) -> None:
+    settings = get_settings()
+    settings["pocet_zprav"] = int(pocet_zprav)
+    set_settings(settings)
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -94,29 +116,33 @@ def admin():
         elif request.form.get("admin_name"):
             session["jmeno"] = f"{request.form.get('admin_name')}@EMC"
             return redirect(url_for("chat"))
-        
+        elif request.form.get("pocet_zprav_btn"):
+            pocet_zprav = request.form.get("pocet_zprav")
+            set_pocet_zprav(pocet_zprav)
+            return redirect(url_for("admin"))
 
 @socketio.on("connect")
 def connect():
-    new_message(session.get("jmeno"), "joined.")
+    new_message(name=session.get("jmeno"), text="joined.", type="connection")
 
 
 @socketio.on("disconnect")
 def disconnect():
-    new_message(session.get("jmeno"), "disconnected.")
+    new_message(name=session.get("jmeno"), text="disconnected.", type="connection")
 
 
 @socketio.on("message")
 def message(data):
-    new_message(session.get("jmeno"), data["data"])
+    text = data["text"]
+    type = "org" if session.get("admin") else "posadka"
+    new_message(name=session.get("jmeno"), text=text, type=type)
 
 
 @app.errorhandler(404)
 def not_found(e):
     return render_template("not_found.html")
 
-
-            
+  
 if __name__ == '__main__':
     create_messages_file()
     socketio.run(app, debug=True)
