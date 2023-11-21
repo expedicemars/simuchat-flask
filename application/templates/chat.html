@@ -4,6 +4,17 @@
 <h1>Komunikujete jako {{komunikacni_jmeno}}</h1>
 <div id="messages" class="messages rounded-3 my-3"></div>
 <div class="inputs row">
+    <div class="col-auto">
+        {% if is_admin %}
+            <a href="/admin">
+                <button class="btn custom-button" type="button">Zpět do admin sekce</button>
+            </a>
+        {% else %}
+            <a href="/">
+                <button class="btn custom-button" type="button">Vybrat člena</button>
+            </a>
+        {% endif %}
+    </div>
     <div class="col">
         <input type="text" id="message" class="form-control text-input">
     </div>

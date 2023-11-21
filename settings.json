@@ -6,5 +6,6 @@
         "Ondra\r",
         "Mon\u010fa"
     ],
-    "pocet_zprav": "10000"
+    "pocet_zprav": "10000",
+    "datetime_zacatku": "2023-12-03T12:00:00"
 }
