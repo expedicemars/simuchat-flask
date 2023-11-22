@@ -15,8 +15,8 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 ### Organizátoři
 
 - navštíví IP serveru `/admin` a zadají heslo `hroch314`
+- počítač, který slouží jako server, může použít `127.0.0.1:5000/admin`, po přihlášení je tam vidět IP pro ostatní
 - nastaví jména členů posádky, začátek simulace a další nastavení.
-
 
 ## Kroky pro spuštění
 

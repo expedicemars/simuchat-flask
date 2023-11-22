@@ -62,3 +62,7 @@ def toggle_pripojovani() -> int:
 def get_pripojovani() -> bool:
     settings = get_settings()
     return settings["zobrazaovani_pripojeni_adminu"]
+
+def get_port() -> int:
+    settings = get_settings()
+    return int(settings["port"])

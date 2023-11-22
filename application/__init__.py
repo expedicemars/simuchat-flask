@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port
 from .message import Message, archivovat
+from .connections import get_ip
+import getmac
 
 
 app = Flask(__name__)
@@ -48,7 +50,16 @@ def admin():
             session["admin"] = True
             pripojovani_3ojc = "zobrazuje" if get_pripojovani() else "nezobrazuje"
             pripojovani_inf = "Nezobrazovat" if get_pripojovani() else "Zobrazovat"
-            return render_template("admin.html", jmena_posadky = get_jmena_posadky_for_admin(), datetime_zacatku = get_datetime_zacatku(), pocet_zprav = get_pocet_zprav(), pripojovani_3ojc = pripojovani_3ojc, pripojovani_inf = pripojovani_inf)
+            return render_template(
+                "admin.html", 
+                jmena_posadky = get_jmena_posadky_for_admin(), 
+                datetime_zacatku = get_datetime_zacatku(), 
+                pocet_zprav = get_pocet_zprav(), 
+                pripojovani_3ojc = pripojovani_3ojc, 
+                pripojovani_inf = pripojovani_inf, 
+                local_ip = f"{get_ip()}:{get_port()}",
+                mac_adress = getmac.get_mac_address()
+            )
     else:
         if request.form.get("save"):
             set_jmena_posadky_from_admin(request.form.get("jmena_posadky"))
