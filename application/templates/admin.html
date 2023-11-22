@@ -20,6 +20,10 @@
     <small>V okně komunikace zbyde jen posledních {{pocet_zprav}} zpráv.</small>
     <button type="submit" name="archivovat" value="whatever" class="btn custom-button mb-5">Archivovat</button>
 
+    <label for="archivovat" class="admin-name-label">Informace o připojených a odpojených organizátorech</label>
+    <small>V tuto chvíli se {{pripojovani_3ojc}}, zda se organizátoři připojují a odpojují.</small>
+    <button type="submit" name="pripojovani" value="whatever" class="btn custom-button mb-5">{{pripojovani_inf}}</button>
+
     <label class="admin-name-label">Nastavit datum a čas začátku simulace</label>
     <small>Zprávy zobrazují čas odeslání relativně k tomuto času</small>
     <input id="pocet_zprav" type="number" name="rok" placeholder="rok" value="{{datetime_zacatku.year}}" class="form-control admin-name-input my-2">

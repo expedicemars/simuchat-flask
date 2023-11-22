@@ -53,3 +53,12 @@ def set_pocet_zprav(pocet_zprav: int) -> None:
 def get_pocet_zprav() -> int:
     settings = get_settings()
     return int(settings["pocet_zprav"])
+
+def toggle_pripojovani() -> int:
+    settings = get_settings()
+    settings["zobrazaovani_pripojeni_adminu"] = not settings["zobrazaovani_pripojeni_adminu"]
+    set_settings(settings)
+    
+def get_pripojovani() -> bool:
+    settings = get_settings()
+    return settings["zobrazaovani_pripojeni_adminu"]
