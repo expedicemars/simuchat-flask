@@ -97,8 +97,7 @@ def connect():
         pass
     else:
         m = Message(name=session.get("jmeno"), text="joined.", type="connection")
-        m.save()
-        m.send()
+        m.save_and_send()
         
 
 
@@ -108,8 +107,7 @@ def disconnect():
         pass
     else:
         m = Message(name=session.get("jmeno"), text="joined.", type="connection")
-        m.save()
-        m.send()
+        m.save_and_send()
 
 
 @socketio.on("message")
@@ -117,8 +115,7 @@ def message(data):
     text = data["text"]
     type = "org" if session.get("admin") else "posadka"
     m = Message(name=session.get("jmeno"), text=text, type=type)
-    m.save()
-    m.send()
+    m.save_and_send()
 
 
 

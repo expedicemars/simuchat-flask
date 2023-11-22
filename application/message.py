@@ -57,21 +57,21 @@ class Message():
             "type": self.type
         }
         return as_dict
+
     
-    def save(self):
+    def save_and_send(self):
         all = Message.get_all()
         all.append(self)
             
         result = [m.as_dict() for m in all]
         with open(current_messages_path(), "w") as file:
             file.write(json.dumps(result, indent=4))
-
     
-    def send(self):
         self_as_dict = self.as_dict()
         self_as_dict["time"] = pretty_cas_zpravy()
         flask_socketio.send(self_as_dict, broadcast=True)
-    
+        
+        
     @staticmethod
     def get_history_on_join() -> str:
         messages = Message.get_all()
