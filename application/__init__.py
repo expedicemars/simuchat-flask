@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port, set_port
 from .message import Message, archivovat
 from .connections import get_ip
 import getmac
@@ -58,7 +58,8 @@ def admin():
                 pripojovani_3ojc = pripojovani_3ojc, 
                 pripojovani_inf = pripojovani_inf, 
                 local_ip = f"{get_ip()}:{get_port()}",
-                mac_adress = getmac.get_mac_address()
+                mac_adress = getmac.get_mac_address(),
+                port = get_port()
             )
     else:
         if request.form.get("save"):
@@ -79,6 +80,9 @@ def admin():
             return redirect(url_for("admin"))
         elif request.form.get("pripojovani"):
             toggle_pripojovani()
+            return redirect(url_for("admin"))
+        elif request.form.get("port_btn"):
+            set_port(request.form.get("port"))
             return redirect(url_for("admin"))
 
             

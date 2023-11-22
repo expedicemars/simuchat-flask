@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 {% block content %}
 
-<h1>Admin sekce komunikace</h1>
+<h1>Admin sekce EMMC</h1>
 <label class="admin-name-label mb-3">V místní síti je EMMC přístupné na {{local_ip}}</label>
 <label class="admin-name-label mb-3">Mac adresa serveru je {{mac_adress}}</label>
 
@@ -26,6 +26,11 @@
     <label for="archivovat" class="admin-name-label">Informace o připojených a odpojených organizátorech</label>
     <small>V tuto chvíli se {{pripojovani_3ojc}}, zda se organizátoři připojují a odpojují.</small>
     <button type="submit" name="pripojovani" value="whatever" class="btn custom-button mb-5">{{pripojovani_inf}}</button>
+
+    <label for="archivovat" class="admin-name-label">Port serveru</label>
+    <small>Pro účinek je třeba restart webové aplikace.</small>
+    <input type="number" name="port" class="form-control admin-name-input my-2" value="{{port}}">
+    <button type="submit" name="port_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
 
     <label class="admin-name-label">Nastavit datum a čas začátku simulace</label>
     <small>Zprávy zobrazují čas odeslání relativně k tomuto času</small>
