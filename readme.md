@@ -8,7 +8,7 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 
 ## Použití
 
-### Posádka
+### Posádka
 
 - navštíví IP serveru `/` a zvolí jméno komunikujícího
 
