@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% block content %}
+
+<h1>Admin sekce komunikace</h1>
+<form method="post" class="form" id="form">
+    <label for="admin_name" class="admin-name-label">Jméno komunikujícího admina</label>
+    <input id="admin_name" type="text" name="admin_name" class="form-control admin-name-input my-2">
+    <button type="button" value="whatever" class="btn custom-button mb-5" onclick="pressed_button()">Připojit se</button>
+    
+    <p class="upravit-cleny">Upravit členy posádky</p>
+    <textarea name="jmena_posadky", rows="5" class="textarea rounded-3 mb-2">{{jmena_posadky}}</textarea>
+    <button type="submit" name="save" value="whatever" class="btn custom-button mb-5">Uložit</button>
+    
+    <label for="pocet_zprav" class="admin-name-label">Počet zpráv, které se zachovají přístupné po archivaci</label>
+    <small>Starší zprávy jsou archivovány a jsou přístupné ve složce</small>
+    <input id="pocet_zprav" type="number" name="pocet_zprav" class="form-control admin-name-input my-2" value="{{pocet_zprav}}">
+    <button type="submit" name="pocet_zprav_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
+
+    <label for="archivovat" class="admin-name-label">Archivovat staré zprávy</label>
+    <small>V okně komunikace zbyde jen posledních {{pocet_zprav}} zpráv.</small>
+    <button type="submit" name="archivovat" value="whatever" class="btn custom-button mb-5">Archivovat</button>
+
+    <label for="archivovat" class="admin-name-label">Informace o připojených a odpojených organizátorech</label>
+    <small>V tuto chvíli se {{pripojovani_3ojc}}, zda se organizátoři připojují a odpojují.</small>
+    <button type="submit" name="pripojovani" value="whatever" class="btn custom-button mb-5">{{pripojovani_inf}}</button>
+
+    <label class="admin-name-label">Nastavit datum a čas začátku simulace</label>
+    <small>Zprávy zobrazují čas odeslání relativně k tomuto času</small>
+    <input id="pocet_zprav" type="number" name="rok" placeholder="rok" value="{{datetime_zacatku.year}}" class="form-control admin-name-input my-2">
+    <input id="pocet_zprav" type="number" name="mesic" placeholder="měsíc" value="{{datetime_zacatku.month}}" class="form-control admin-name-input my-2">
+    <input id="pocet_zprav" type="number" name="den" placeholder="den" value="{{datetime_zacatku.day}}" class="form-control admin-name-input my-2">
+    <input id="pocet_zprav" type="number" name="hodina" placeholder="hodina" value="{{datetime_zacatku.hour}}" class="form-control admin-name-input my-2">
+    <input id="pocet_zprav" type="number" name="minuta" placeholder="minuta" value="{{datetime_zacatku.minute}}" class="form-control admin-name-input my-2">
+    <button type="submit" name="datum_btn" value="whatever" class="btn custom-button">Uložit</button>
+
+</form>
+
+<script type="text/javascript">
+    function pressed_button() {
+        if (!document.getElementById("admin_name").value == "") {
+            document.getElementById("form").submit()
+        }
+    }
+</script> 
+
+{% endblock %}

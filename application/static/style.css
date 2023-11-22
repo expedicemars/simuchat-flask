@@ -39,11 +39,13 @@ h1{
     background-color: #272727;
     border-color: black;
     color: #B65900;
+    font-weight: bold;
 }
 .text-input:focus {
     background-color: #4F4F4F;
     border-color:cornflowerblue;
     color: #B65900;
+    font-weight: bold;
 }
 .message{
     display: flex;
@@ -58,6 +60,17 @@ h1{
 .message .date{
     margin-left: auto;
     white-space: nowrap;
+}
+.message-connection{
+    color: green;
+}
+.message-org{
+    color: greenyellow;
+    font-weight: bold;
+}
+.message-posadka{
+    color: #FFA52E;
+    font-weight: bold;
 }
 .form{
     display: flex;
