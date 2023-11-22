@@ -44,7 +44,12 @@ def get_datetime_zacatku() -> datetime:
     settings = get_settings()
     return datetime.fromisoformat(settings["datetime_zacatku"])
 
+
 def set_pocet_zprav(pocet_zprav: int) -> None:
     settings = get_settings()
     settings["pocet_zprav"] = int(pocet_zprav)
     set_settings(settings)
+
+def get_pocet_zprav() -> int:
+    settings = get_settings()
+    return int(settings["pocet_zprav"])

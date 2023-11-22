@@ -39,11 +39,13 @@ h1{
     background-color: #272727;
     border-color: black;
     color: #B65900;
+    font-weight: bold;
 }
 .text-input:focus {
     background-color: #4F4F4F;
     border-color:cornflowerblue;
     color: #B65900;
+    font-weight: bold;
 }
 .message{
     display: flex;

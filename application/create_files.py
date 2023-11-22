@@ -1,8 +1,8 @@
-from .paths import messages_path
+from .paths import current_messages_path
 import json
 
 def create_messages_file() -> None:
-    p = messages_path()
+    p = current_messages_path()
     if not p.exists():
         p.touch()
         with open(p, "w") as file:

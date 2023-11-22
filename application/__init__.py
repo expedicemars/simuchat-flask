@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav
 from .message import Message
 
 
@@ -46,7 +46,7 @@ def admin():
         else:
             session.clear()
             session["admin"] = True
-            return render_template("admin.html", jmena_posadky = get_jmena_posadky_for_admin(), datetime_zacatku = get_datetime_zacatku())
+            return render_template("admin.html", jmena_posadky = get_jmena_posadky_for_admin(), datetime_zacatku = get_datetime_zacatku(), pocet_zprav = get_pocet_zprav())
     else:
         if request.form.get("save"):
             set_jmena_posadky_from_admin(request.form.get("jmena_posadky"))

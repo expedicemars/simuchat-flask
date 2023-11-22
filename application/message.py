@@ -1,5 +1,5 @@
 from datetime import datetime
-from .paths import messages_path
+from .paths import current_messages_path
 import json
 from .settings_handling import get_datetime_zacatku
 import flask_socketio
@@ -9,7 +9,6 @@ def pretty_cas_zpravy(time: datetime = None) -> str:
     datetime_zpravy = time if time else datetime.now()
     dt = datetime_zpravy - datetime_zacatku
     diff = dt.total_seconds()
-    print(diff)
     sign = ""
     if diff < 0:
         sign = "- "
@@ -40,10 +39,10 @@ class Message():
     def save(self):
         self_as_dict = self.as_dict()
         
-        with open(messages_path()) as file:
+        with open(current_messages_path()) as file:
             messages = json.load(file)
         messages.append(self_as_dict)
-        with open(messages_path(), "w") as file:
+        with open(current_messages_path(), "w") as file:
             file.write(json.dumps(messages, indent=4))
     
     def send(self):
@@ -64,7 +63,7 @@ class Message():
 
     @staticmethod
     def get_all() -> list["Message"]:
-        with open(messages_path()) as file:
+        with open(current_messages_path()) as file:
             messages = json.load(file)
         resut = []
         for msg in messages:
