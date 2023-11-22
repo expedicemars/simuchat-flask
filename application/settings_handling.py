@@ -71,3 +71,12 @@ def set_port(port: int) -> None:
     settings = get_settings()
     settings["port"] = port
     set_settings(settings)
+
+def get_prodleva() -> int:
+    settings = get_settings()
+    return int(settings["prodleva"])
+
+def set_prodleva(prodleva: int) -> None:
+    settings = get_settings()
+    settings["prodleva"] = prodleva
+    set_settings(settings)

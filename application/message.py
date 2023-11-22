@@ -61,6 +61,7 @@ class Message():
     
     def save_and_send(self):
         all = Message.get_all()
+        previous_message = all[-1] # pro alert
         all.append(self)
             
         result = [m.as_dict() for m in all]

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port, set_port
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva
 from .message import Message, archivovat
 from .connections import get_ip
 import getmac
@@ -59,7 +59,8 @@ def admin():
                 pripojovani_inf = pripojovani_inf, 
                 local_ip = f"{get_ip()}:{get_port()}",
                 mac_adress = getmac.get_mac_address(),
-                port = get_port()
+                port = get_port(), 
+                prodleva = get_prodleva()
             )
     else:
         if request.form.get("save"):
@@ -82,7 +83,10 @@ def admin():
             toggle_pripojovani()
             return redirect(url_for("admin"))
         elif request.form.get("port_btn"):
-            set_port(request.form.get("port"))
+            set_port(int(request.form.get("port")))
+            return redirect(url_for("admin"))
+        elif request.form.get("prodleva_btn"):
+            set_prodleva(int(request.form.get("prodleva")))
             return redirect(url_for("admin"))
 
             
