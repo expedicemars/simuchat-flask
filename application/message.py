@@ -1,8 +1,9 @@
 from datetime import datetime
-from .paths import current_messages_path
+from .paths import current_messages_path, history_path
 import json
-from .settings_handling import get_datetime_zacatku
+from .settings_handling import get_datetime_zacatku, get_pocet_zprav
 import flask_socketio
+from flask import current_app
 
 def pretty_cas_zpravy(time: datetime = None) -> str:
     datetime_zacatku = get_datetime_zacatku()
@@ -19,6 +20,27 @@ def pretty_cas_zpravy(time: datetime = None) -> str:
     leftover = leftover - minutes*60
     sec = int(leftover)
     return f"{sign}{str(hours).rjust(2, '0')} : {str(minutes).rjust(2, '0')} : {str(sec).rjust(2, '0')}"
+
+
+def archivovat() -> None:
+    with open(current_messages_path()) as current:
+        current: list[dict] = json.load(current)
+    with open(history_path()) as history:
+        history: list[dict] = json.load(history)
+    
+    n = get_pocet_zprav()
+    new_current = current[-n:]
+    new_history = current[:-n]
+    whole_history = history + new_history
+    
+    with open(current_messages_path(), "w") as c:
+        c.write(json.dumps(new_current, indent=4))
+    with open(history_path(), "w") as h:
+        h.write(json.dumps(whole_history, indent=4))
+    
+    with current_app.app_context():
+        current_app.extensions["socketio"].emit("archivovani", {"pocet": get_pocet_zprav()})
+        
 
 class Message():
     def __init__(self, name: str, text: str, type: str, time: datetime = None) -> None:
@@ -39,9 +61,11 @@ class Message():
     def save(self):
         all = Message.get_all()
         all.append(self)
+            
         result = [m.as_dict() for m in all]
         with open(current_messages_path(), "w") as file:
             file.write(json.dumps(result, indent=4))
+
     
     def send(self):
         self_as_dict = self.as_dict()

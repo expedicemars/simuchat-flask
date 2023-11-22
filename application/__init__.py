@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
 from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav
-from .message import Message
+from .message import Message, archivovat
 
 
 app = Flask(__name__)
@@ -60,6 +60,9 @@ def admin():
             return redirect(url_for("admin"))
         elif request.form.get("datum_btn"):
             set_datetime_zacatku(request_form=request.form.to_dict())
+            return redirect(url_for("admin"))
+        elif request.form.get("archivovat"):
+            archivovat()
             return redirect(url_for("admin"))
 
             
