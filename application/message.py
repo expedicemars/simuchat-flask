@@ -37,13 +37,11 @@ class Message():
         return as_dict
     
     def save(self):
-        self_as_dict = self.as_dict()
-        
-        with open(current_messages_path()) as file:
-            messages = json.load(file)
-        messages.append(self_as_dict)
+        all = Message.get_all()
+        all.append(self)
+        result = [m.as_dict() for m in all]
         with open(current_messages_path(), "w") as file:
-            file.write(json.dumps(messages, indent=4))
+            file.write(json.dumps(result, indent=4))
     
     def send(self):
         self_as_dict = self.as_dict()
