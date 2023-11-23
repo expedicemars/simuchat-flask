@@ -21,7 +21,7 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 
 ### MacOS
 
-1. nainstalovat python
+1. nainstalovat python. Dělal jsem to na 3.11 a mělo by to fungovat na novějších.
 2. clone tohoto repa někam do složky
 3. v terminálu:
     - `pip install pipenv`
