@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva
 from .message import Message, archivovat
 from .connections import get_ip
 import getmac
@@ -26,7 +26,7 @@ def join():
 def chat():
     if not session.get("jmeno"):
         return redirect(url_for("join"))
-    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = Message.get_history_on_join(), is_admin = session.get("admin"))
+    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = Message.get_history_on_join(), prodleva = get_prodleva(), is_admin = session.get("admin"))
 
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
@@ -58,7 +58,10 @@ def admin():
                 pripojovani_3ojc = pripojovani_3ojc, 
                 pripojovani_inf = pripojovani_inf, 
                 local_ip = f"{get_ip()}:{get_port()}",
-                mac_adress = getmac.get_mac_address()
+                mac_adress = getmac.get_mac_address(),
+                port = get_port(), 
+                prodleva = get_prodleva(),
+                aktualni_pocet_zprav = len(Message.get_all())
             )
     else:
         if request.form.get("save"):
@@ -80,6 +83,12 @@ def admin():
         elif request.form.get("pripojovani"):
             toggle_pripojovani()
             return redirect(url_for("admin"))
+        elif request.form.get("port_btn"):
+            set_port(int(request.form.get("port")))
+            return redirect(url_for("admin"))
+        elif request.form.get("prodleva_btn"):
+            set_prodleva(int(request.form.get("prodleva")))
+            return redirect(url_for("admin"))
 
             
 @app.errorhandler(404)
@@ -93,19 +102,16 @@ def connect():
         pass
     else:
         m = Message(name=session.get("jmeno"), text="joined.", type="connection")
-        m.save()
-        m.send()
+        m.save_and_send()
         
-
 
 @socketio.on("disconnect")
 def disconnect():
     if session.get("admin") and not get_pripojovani():
         pass
     else:
-        m = Message(name=session.get("jmeno"), text="joined.", type="connection")
-        m.save()
-        m.send()
+        m = Message(name=session.get("jmeno"), text="disconnected.", type="connection")
+        m.save_and_send()
 
 
 @socketio.on("message")
@@ -113,8 +119,7 @@ def message(data):
     text = data["text"]
     type = "org" if session.get("admin") else "posadka"
     m = Message(name=session.get("jmeno"), text=text, type=type)
-    m.save()
-    m.send()
+    m.save_and_send()
 
 
 

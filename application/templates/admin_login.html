@@ -1,9 +1,14 @@
 {% extends "index.html" %}
 {% block content %}
 
-<h1>Login do admin sekce</h1>
-<form method="post" class="form">
-    <input type="password" name="heslo" class="form-control admin-name-input my-2">
-</form>
+<section class="border rounded-3 border-dark border-2 main p-3 text-center h-100">
+
+    <h1>Login do admin sekce</h1>
+    <form method="post" class="form">
+        <input type="password" name="heslo" class="form-control admin-name-input my-2">
+        <button type="submit" class="btn custom-button">Vstoupit</button>
+    </form>
+    
+</section>
 
 {% endblock %}
