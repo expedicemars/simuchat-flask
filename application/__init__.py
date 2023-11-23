@@ -60,7 +60,8 @@ def admin():
                 local_ip = f"{get_ip()}:{get_port()}",
                 mac_adress = getmac.get_mac_address(),
                 port = get_port(), 
-                prodleva = get_prodleva()
+                prodleva = get_prodleva(),
+                aktualni_pocet_zprav = len(Message.get_all())
             )
     else:
         if request.form.get("save"):

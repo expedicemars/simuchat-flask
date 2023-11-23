@@ -1,37 +1,49 @@
 {% extends "index.html" %}
 {% block content %}
 
-<h1>Komunikujete jako {{komunikacni_jmeno}}</h1>
-<div id="messages_div" class="messages rounded-3 my-3"></div>
-<div class="inputs row">
-    <div class="col-auto">
-        {% if is_admin %}
-            <a href="/admin">
-                <button class="btn custom-button" type="button">Zpět do admin sekce</button>
-            </a>
-        {% else %}
-            <a href="/">
-                <button class="btn custom-button" type="button">Vybrat člena</button>
-            </a>
-        {% endif %}
-    </div>
-    <div class="col">
-        <input type="text" id="message" class="form-control text-input">
-    </div>
-    <div class="col-auto">
-        <button id="odeslat_button" class="btn custom-button">Odeslat</button>
-    </div>
-</div>
+<section class="border rounded-3 border-dark border-2 main p-3 text-center h-100">
 
-<div id="upozorneni_modal" class="upozorneni-modal">
-    <div class="modal-content" id="modal_content">
-        <p id="popup_message"></p>
-        <p>Kliknutím kamkoli toto upozornění zavřete.</p>
+    <h1>Komunikujete jako {{komunikacni_jmeno}}</h1>
+    <div id="messages_div" class="messages rounded-3 my-3">
+        <div class="message message-connection">
+            Starší zprávy jsou uloženy na serveru a jsou na vyžádání přístupné.
+        </div>
     </div>
-</div>
+    <div class="inputs row">
+        <div class="col-auto">
+            {% if is_admin %}
+                <a href="/admin">
+                    <button class="btn custom-button" type="button">Zpět do admin sekce</button>
+                </a>
+            {% else %}
+                <a href="/">
+                    <button class="btn custom-button" type="button">Vybrat člena</button>
+                </a>
+            {% endif %}
+        </div>
+        <div class="col">
+            {% if is_admin %}
+                <input type="text" id="message" class="form-control text-input text-input-org">
+            {% else %}
+                <input type="text" id="message" class="form-control text-input text-input-posadka">
+            {% endif %}
+        </div>
+        <div class="col-auto">
+            <button id="odeslat_button" class="btn custom-button">Odeslat</button>
+        </div>
+    </div>
 
-<input type="text" hidden id="messages_input" value="{{messages}}">
-<input type="text" hidden id="prodleva" value="{{prodleva}}">
+    <div id="upozorneni_modal" class="upozorneni-modal">
+        <div class="modal-content" id="modal_content">
+            <p id="popup_message"></p>
+            <p>Kliknutím kamkoli toto upozornění zavřete.</p>
+        </div>
+    </div>
+
+    <input type="text" hidden id="messages_input" value="{{messages}}">
+    <input type="text" hidden id="prodleva" value="{{prodleva}}">
+
+</section>
 
 <script type="module" src="{{url_for('static', filename='chat.js')}}"></script>
 

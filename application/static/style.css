@@ -16,6 +16,12 @@ body{
     display: flex;
     flex-direction: column;
 }
+.main-admin{
+    background-color: black;
+    min-height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
 .custom-button{
     background-color: #B65900;
     min-width: 150px;
@@ -38,15 +44,27 @@ h1{
 .text-input {
     background-color: #272727;
     border-color: black;
-    color: #B65900;
     font-weight: bold;
 }
 .text-input:focus {
     background-color: #4F4F4F;
     border-color:cornflowerblue;
-    color: #B65900;
     font-weight: bold;
 }
+
+.text-input-org{
+    color: greenyellow;
+}
+.text-input-org:focus{
+    color: greenyellow;
+}
+.text-input-posadka{
+    color: #FFA52E;
+}
+.text-input-posadka:focus{
+    color: #FFA52E;
+}
+
 .message{
     display: flex;
 }
@@ -85,20 +103,19 @@ h1{
     margin-bottom: 0px;
     font-weight: bold;
 }
-.admin-name-label{
+.custom-label{
     font-weight: bold;
 }
-.admin-name-input {
+.admin-input {
     background-color: #272727;
     border-color: black;
-    color: #B65900;
+    color: #FFA52E;
     width: 300px;
 }
-.admin-name-input:focus {
+.admin-input:focus {
     background-color: #4F4F4F;
     border-color:cornflowerblue;
-    color: #B65900;
-}
+    color: #FFA52E;}
 .link{
     color:#B65900;
     font-weight: bold;
