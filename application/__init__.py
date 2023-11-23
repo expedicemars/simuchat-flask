@@ -26,7 +26,7 @@ def join():
 def chat():
     if not session.get("jmeno"):
         return redirect(url_for("join"))
-    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = Message.get_history_on_join(), is_admin = session.get("admin"))
+    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = Message.get_history_on_join(), prodleva = get_prodleva())
 
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():

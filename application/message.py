@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from .paths import current_messages_path, history_path
 import json
-from .settings_handling import get_datetime_zacatku, get_pocet_zprav
+from .settings_handling import get_datetime_zacatku, get_pocet_zprav, get_prodleva
 import flask_socketio
 from flask import current_app
 
@@ -60,14 +60,15 @@ class Message():
 
     
     def save_and_send(self):
+        #saving
         all = Message.get_all()
-        previous_message = all[-1] # pro alert
         all.append(self)
             
         result = [m.as_dict() for m in all]
         with open(current_messages_path(), "w") as file:
             file.write(json.dumps(result, indent=4))
     
+        #sending
         self_as_dict = self.as_dict()
         self_as_dict["time"] = pretty_cas_zpravy()
         flask_socketio.send(self_as_dict, broadcast=True)
