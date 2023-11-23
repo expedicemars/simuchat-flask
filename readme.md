@@ -4,7 +4,6 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 ## TODO
 
 - přidělat kroky ke spuštění
-- upozornění na novou zprávu
 
 ## Použití
 

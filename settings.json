@@ -6,9 +6,9 @@
         "Ondra\r",
         "Mon\u010fa"
     ],
-    "pocet_zprav": 20,
+    "pocet_zprav": 100,
     "datetime_zacatku": "2023-11-21T22:00:00",
     "zobrazaovani_pripojeni_adminu": true,
     "port": 5000,
-    "prodleva": 10
+    "prodleva": 120
 }
