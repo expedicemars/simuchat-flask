@@ -1,10 +1,13 @@
 from pathlib import Path
 
-def current_messages_path():
-    return Path.cwd() / "messages_history" / "current_messages.json"
+def messages_history_folder_path() -> Path:
+    return Path.cwd() / "messages_history"
+
+def current_messages_path() -> Path:
+    return messages_history_folder_path() / "current_messages.json"
 
 def history_path():
-    return Path.cwd() / "messages_history" / "history.json"
+    return messages_history_folder_path() / "history.json"
 
 def settings_path():
     return Path.cwd() / "settings.json"
