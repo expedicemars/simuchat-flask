@@ -26,7 +26,7 @@ def join():
 def chat():
     if not session.get("jmeno"):
         return redirect(url_for("join"))
-    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = Message.get_history_on_join(), prodleva = get_prodleva())
+    return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = Message.get_history_on_join(), prodleva = get_prodleva(), is_admin = session.get("admin"))
 
 @app.route("/admin_login", methods=["GET", "POST"])
 def admin_login():
@@ -104,13 +104,12 @@ def connect():
         m.save_and_send()
         
 
-
 @socketio.on("disconnect")
 def disconnect():
     if session.get("admin") and not get_pripojovani():
         pass
     else:
-        m = Message(name=session.get("jmeno"), text="joined.", type="connection")
+        m = Message(name=session.get("jmeno"), text="disconnected.", type="connection")
         m.save_and_send()
 
 

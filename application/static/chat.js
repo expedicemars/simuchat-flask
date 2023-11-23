@@ -4,8 +4,20 @@ let messages_div = document.getElementById("messages_div")
 let old_messages = JSON.parse(document.getElementById("messages_input").value)
 document.getElementById("message").addEventListener("keydown", handleKeyPress)
 document.getElementById("odeslat_button").addEventListener("click", sendMessage)
-let last_message_datetime = new Date()
 let prodleva = document.getElementById("prodleva").value
+
+let last_message_datetime = new Date()
+let modal_is_active = false
+
+let modal = document.getElementById("upozorneni_modal")
+let modal_content = document.getElementById("modal_content")
+window.onclick = function(event) {
+    if (event.target == modal || event.target == modal_content) {
+        modal.style.display = "none"
+        modal_is_active = false
+    }
+}
+
 
 
 old_messages.forEach(element => {
@@ -18,8 +30,11 @@ socketio.on("message", (data) => {
     } else {
         let current_datetime = new Date()
         let delta = (current_datetime - last_message_datetime) / 1000
-        if (delta > prodleva) {
-            alert("Zpráva z " + data.time + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění.")
+        if (delta > prodleva && !modal_is_active) {
+            modal.style.display = "block"
+            modal_is_active = true
+            let popup_message = "Zpráva z " + data.time + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
+            document.getElementById("popup_message").innerText = popup_message
         } else {
             last_message_datetime = new Date()
         }
