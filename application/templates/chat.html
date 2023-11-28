@@ -23,9 +23,9 @@
         </div>
         <div class="col">
             {% if is_admin %}
-                <input type="text" id="message" class="form-control text-input text-input-org">
+                <textarea id="message" class="form-control chat-input chat-input-org" rows="1"></textarea>
             {% else %}
-                <input type="text" id="message" class="form-control text-input text-input-posadka">
+                <textarea id="message" class="form-control chat-input chat-input-posadka" rows="1"></textarea>
             {% endif %}
         </div>
         <div class="col-auto">
