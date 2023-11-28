@@ -2,9 +2,10 @@ let socketio = io()
 
 let messages_div = document.getElementById("messages_div")
 let old_messages = JSON.parse(document.getElementById("messages_input").value)
-document.getElementById("message").addEventListener("keydown", handleKeyPress)
-document.getElementById("odeslat_button").addEventListener("click", sendMessage)
+let message_input = document.getElementById("message")
 let prodleva = document.getElementById("prodleva").value
+document.getElementById("odeslat_button").addEventListener("click", sendMessage)
+message_input.addEventListener("keydown", handleKeyPress)
 
 let last_message_datetime = new Date()
 let modal_is_active = false
@@ -48,13 +49,13 @@ socketio.on("archivovani", (data) => {
 })
 
 function createMessage(name, text, time, type) {
+    let id = "text-" + name + "-" + time
     let new_message = `
     <div class="message message-${type}">
         <span class="name">
             ${name}
         </span>
-        <span class="text">
-            ${text}
+        <span class="text" id="${id}">
         </span>
         <span class="date">
             ${time}
@@ -62,19 +63,25 @@ function createMessage(name, text, time, type) {
     </div>
     `
     messages_div.innerHTML += new_message
+    document.getElementById("text-" + name + "-" + time).innerText = text // kvuli tomu bordelu s newlines
     messages_div.scrollTop = messages_div.scrollHeight
 }
 
 function sendMessage() {
-    let message_input = document.getElementById("message")
     if (message_input.value == "") return
     socketio.emit("message", {text: message_input.value})
     message_input.value = ""
     last_message_datetime = new Date()
 }
 
+
 function handleKeyPress(event) {
     if (event.key == "Enter") {
-        sendMessage()
-    } 
+        if (event.shiftKey) {
+            
+        } else {
+            sendMessage()
+            event.preventDefault()
+        }
+    }
 }

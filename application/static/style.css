@@ -41,27 +41,27 @@ h1{
     padding: 1rem;
     flex-direction: column-reverse;
 }
-.text-input {
+.chat-input {
     background-color: #272727;
     border-color: black;
     font-weight: bold;
 }
-.text-input:focus {
+.chat-input:focus {
     background-color: #4F4F4F;
     border-color:cornflowerblue;
     font-weight: bold;
 }
 
-.text-input-org{
+.chat-input-org{
     color: greenyellow;
 }
-.text-input-org:focus{
+.chat-input-org:focus{
     color: greenyellow;
 }
-.text-input-posadka{
+.chat-input-posadka{
     color: #FFA52E;
 }
-.text-input-posadka:focus{
+.chat-input-posadka:focus{
     color: #FFA52E;
 }
 
