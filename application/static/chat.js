@@ -36,6 +36,7 @@ socketio.on("message", (data) => {
             modal_is_active = true
             let popup_message = "Zpráva z " + data.time + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
             document.getElementById("popup_message").innerText = popup_message
+            last_message_datetime = new Date()
         } else {
             last_message_datetime = new Date()
         }
