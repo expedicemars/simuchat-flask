@@ -7,7 +7,9 @@
     <form method="post" class="form" id="form">
         <label for="admin_name" class="custom-label">Jméno komunikujícího admina</label>
         <input id="admin_name" type="text" name="admin_name" class="form-control admin-input my-2">
-        <button type="button" value="whatever" class="btn custom-button mb-5" onclick="pressed_button()">Připojit se</button>
+        <button type="submit" value="whatever" class="btn custom-button mb-2" name="connect_admin">Připojit se</button>
+        <button type="submit" value="silent" class="btn custom-button mb-5" name="connect_admin">Připojit se potichu</button>
+
     </form>
 </section>
 
@@ -44,6 +46,7 @@
 
         <label for="archivovat" class="custom-label">Informace o připojených a odpojených organizátorech</label>
         <small>V tuto chvíli se {{pripojovani_3ojc}}, zda se organizátoři připojují a odpojují.</small>
+        <small>Jednorázově se dá připojit a odpojit potichu pomocí tlačítka nahoře.</small>
         <button type="submit" name="pripojovani" value="whatever" class="btn custom-button mb-5">{{pripojovani_inf}}</button>
 
         <label for="archivovat" class="custom-label">Upozornění na novou zprávu</label>
@@ -68,15 +71,5 @@
         
     </form>
 </section>
-
-
-
-<script type="text/javascript">
-    function pressed_button() {
-        if (!document.getElementById("admin_name").value == "") {
-            document.getElementById("form").submit()
-        }
-    }
-</script> 
 
 {% endblock %}
