@@ -73,6 +73,8 @@ function sendMessage() {
     socketio.emit("message", {text: message_input.value})
     message_input.value = ""
     last_message_datetime = new Date()
+    modal.style.display = "none"
+    modal_is_active = false
 }
 
 
