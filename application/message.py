@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from .paths import current_messages_path, history_path
 import json
-from .settings_handling import get_datetime_zacatku, get_pocet_zprav, get_prodleva
+from .settings_handling import get_datetime_zacatku, get_pocet_zprav_manual, get_pocet_zprav_auto
 import flask_socketio
 from flask import current_app
 
@@ -28,7 +28,7 @@ def archivovat() -> None:
     with open(history_path()) as history:
         history: list[dict] = json.load(history)
     
-    n = get_pocet_zprav()
+    n = get_pocet_zprav_manual()
     new_current = current[-n:]
     new_history = current[:-n]
     whole_history = history + new_history
@@ -39,7 +39,7 @@ def archivovat() -> None:
         h.write(json.dumps(whole_history, indent=4))
     
     with current_app.app_context():
-        current_app.extensions["socketio"].emit("archivovani", {"pocet": get_pocet_zprav()})
+        current_app.extensions["socketio"].emit("archivovani", {"pocet": get_pocet_zprav_manual()})
         
 
 class Message():
@@ -63,6 +63,7 @@ class Message():
         #saving
         all = Message.get_all()
         all.append(self)
+        
             
         result = [m.as_dict() for m in all]
         with open(current_messages_path(), "w") as file:
@@ -72,6 +73,9 @@ class Message():
         self_as_dict = self.as_dict()
         self_as_dict["time"] = pretty_cas_zpravy()
         flask_socketio.send(self_as_dict, broadcast=True)
+        
+        if len(all) > get_pocet_zprav_auto():
+            archivovat()
         
         
     @staticmethod

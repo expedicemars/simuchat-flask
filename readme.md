@@ -1,6 +1,10 @@
 # Komunikace pro simulace Expedice Mars
 Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti tak, aby nebyl potřeba internet. 
 
+## Archivování zpráv
+
+Archivovat zprávy je nutné, protože dlouhá načtená historie způsobuje zpomalení aplikace. Archivuje se buď manuálně, nebo automaticky.
+
 ## TODO
 
 - přidělat kroky ke spuštění
@@ -40,5 +44,6 @@ Nemám windows, prosím odzkoušet a doplnit sem / říct Pípovi
 - Flask
 - Flask-SocketIO
 - natvrdo stažený bootstrap a socketio.js proto, aby server fungoval zcela bez internetu.
+- gunicorn s workerem eventlet
 
 by Josef Lát

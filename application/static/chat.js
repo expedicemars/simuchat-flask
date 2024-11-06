@@ -29,7 +29,6 @@ old_messages.forEach(element => {
 });
 
 socketio.on("message", (data) => {
-    console.log(data)
     createMessage(data.name, data.text, data.time, data.type)
     if (data.type == "connection") {
     } else {
@@ -55,6 +54,7 @@ socketio.on("message", (data) => {
 
 // TODO tohle spis nefunguje
 socketio.on("archivovani", (data) => {
+    console.log("probehl archivovani")
     while (messages_div.firstChild && data["pocet"] < messages_div.children.length) {
         messages_div.removeChild(messages_div.firstChild);
     }
