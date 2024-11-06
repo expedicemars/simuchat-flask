@@ -45,14 +45,23 @@ def get_datetime_zacatku() -> datetime:
     return datetime.fromisoformat(settings["datetime_zacatku"])
 
 
-def set_pocet_zprav(pocet_zprav: int) -> None:
+def set_pocet_zprav_manual(pocet_zprav_manual: int) -> None:
     settings = get_settings()
-    settings["pocet_zprav"] = int(pocet_zprav)
+    settings["pocet_zprav_manual"] = int(pocet_zprav_manual)
+    set_settings(settings)
+    
+def set_pocet_zprav_auto(pocet_zprav_auto: int) -> None:
+    settings = get_settings()
+    settings["pocet_zprav_auto"] = int(pocet_zprav_auto)
     set_settings(settings)
 
-def get_pocet_zprav() -> int:
+def get_pocet_zprav_manual() -> int:
     settings = get_settings()
-    return int(settings["pocet_zprav"])
+    return int(settings["pocet_zprav_manual"])
+
+def get_pocet_zprav_auto() -> int:
+    settings = get_settings()
+    return int(settings["pocet_zprav_auto"])
 
 def toggle_pripojovani() -> int:
     settings = get_settings()

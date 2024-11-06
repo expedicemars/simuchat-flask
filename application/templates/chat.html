@@ -1,13 +1,16 @@
 {% extends "index.html" %}
 {% block content %}
 
+<input hidden type="text" id="is_admin" value="{{is_admin}}">
 <section class="border rounded-3 border-dark border-2 main p-3 text-center h-100">
 
     <h1>Komunikujete jako {{komunikacni_jmeno}}</h1>
-    <div id="messages_div" class="messages rounded-3 my-3">
-        <div class="message message-connection">
+    <div>
+        <small>
             Starší zprávy jsou uloženy na serveru a jsou na vyžádání přístupné.
-        </div>
+        </small>
+    </div>
+    <div id="messages_div" class="messages rounded-3 my-3">
     </div>
     <div class="inputs row">
         <div class="col-auto">
@@ -23,9 +26,9 @@
         </div>
         <div class="col">
             {% if is_admin %}
-                <textarea id="message" class="form-control chat-input chat-input-org" rows="1"></textarea>
+                <textarea id="message" class="form-control chat-input chat-input-org" rows="3"></textarea>
             {% else %}
-                <textarea id="message" class="form-control chat-input chat-input-posadka" rows="1"></textarea>
+                <textarea id="message" class="form-control chat-input chat-input-posadka" rows="3"></textarea>
             {% endif %}
         </div>
         <div class="col-auto">

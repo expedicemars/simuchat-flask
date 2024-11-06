@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav, set_datetime_zacatku, get_pocet_zprav, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav_manual, set_datetime_zacatku, get_pocet_zprav_manual, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva, set_pocet_zprav_auto, get_pocet_zprav_auto
 from .message import Message, archivovat
 from .connections import get_ip
 import getmac
@@ -54,7 +54,8 @@ def admin():
                 "admin.html", 
                 jmena_posadky = get_jmena_posadky_for_admin(), 
                 datetime_zacatku = get_datetime_zacatku(), 
-                pocet_zprav = get_pocet_zprav(), 
+                pocet_zprav_manual = get_pocet_zprav_manual(), 
+                pocet_zprav_auto = get_pocet_zprav_auto(),
                 pripojovani_3ojc = pripojovani_3ojc, 
                 pripojovani_inf = pripojovani_inf, 
                 local_ip = f"{get_ip()}:{get_port()}",
@@ -67,12 +68,29 @@ def admin():
         if request.form.get("save"):
             set_jmena_posadky_from_admin(request.form.get("jmena_posadky"))
             return redirect(url_for("admin"))
-        elif request.form.get("admin_name"):
-            session["jmeno"] = f"{request.form.get('admin_name')}@EMMC"
-            return redirect(url_for("chat"))
-        elif request.form.get("pocet_zprav_btn"):
-            pocet_zprav = request.form.get("pocet_zprav")
-            set_pocet_zprav(pocet_zprav)
+        elif mode := request.form.get("connect_admin"):
+            jmeno = request.form.get("admin_name")
+            if jmeno == "":
+                return redirect(url_for("admin"))
+            else:
+                jmeno = jmeno + "@EMMC"
+                if mode == "silent":
+                    session["mode"] = "silent"
+                session["jmeno"] = jmeno
+                return redirect(url_for("chat"))
+        # elif request.form.get("connect_admin_silent"):
+        #     pass
+            
+        # elif request.form.get("admin_name"):
+        #     session["jmeno"] = f"{request.form.get('admin_name')}@EMMC"
+        #     return redirect(url_for("chat"))
+        elif request.form.get("pocet_zprav_manual_btn"):
+            pocet_zprav_manual = request.form.get("pocet_zprav_manual")
+            set_pocet_zprav_manual(pocet_zprav_manual)
+            return redirect(url_for("admin"))
+        elif request.form.get("pocet_zprav_auto_btn"):
+            pocet_zprav_auto = request.form.get("pocet_zprav_auto")
+            set_pocet_zprav_auto(pocet_zprav_auto)
             return redirect(url_for("admin"))
         elif request.form.get("datum_btn"):
             set_datetime_zacatku(request_form=request.form.to_dict())
@@ -100,6 +118,8 @@ def not_found(e):
 def connect():
     if session.get("admin") and not get_pripojovani():
         pass
+    if session.get("mode") == "silent":
+        pass
     else:
         m = Message(name=session.get("jmeno"), text="joined.", type="connection")
         m.save_and_send()
@@ -108,6 +128,8 @@ def connect():
 @socketio.on("disconnect")
 def disconnect():
     if session.get("admin") and not get_pripojovani():
+        pass
+    if session.get("mode") == "silent":
         pass
     else:
         m = Message(name=session.get("jmeno"), text="disconnected.", type="connection")

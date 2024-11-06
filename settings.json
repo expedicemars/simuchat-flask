@@ -1,14 +1,13 @@
 {
     "jmena_posadky": [
-        "Niky\r",
-        "Kuba\r",
-        "Lidu\u0161ka\r",
-        "Ondra\r",
-        "Mon\u010fa"
+        "Test\r",
+        "test\r",
+        "a"
     ],
-    "pocet_zprav": 200,
-    "datetime_zacatku": "2023-11-21T22:00:00",
+    "pocet_zprav_manual": 50,
+    "pocet_zprav_auto": 200,
+    "datetime_zacatku": "2024-11-10T20:00:00",
     "zobrazaovani_pripojeni_adminu": true,
-    "port": 5000,
+    "port": 8000,
     "prodleva": 120
 }

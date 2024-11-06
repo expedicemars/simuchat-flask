@@ -1,6 +1,10 @@
 # Komunikace pro simulace Expedice Mars
 Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti tak, aby nebyl potřeba internet. 
 
+## Archivování zpráv
+
+Archivovat zprávy je nutné, protože dlouhá načtená historie způsobuje zpomalení aplikace. Archivuje se buď manuálně, nebo automaticky.
+
 ## TODO
 
 - přidělat kroky ke spuštění
@@ -14,7 +18,7 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 ### Organizátoři
 
 - navštíví IP serveru `/admin` a zadají heslo `hroch314`
-- počítač, který slouží jako server, může použít `127.0.0.1:5000/admin`, po přihlášení je tam vidět IP pro ostatní
+- počítač, který slouží jako server, může použít `127.0.0.1:8000/admin`, po přihlášení je tam vidět IP pro ostatní
 - nastaví jména členů posádky, začátek simulace a další nastavení.
 
 ## Kroky pro spuštění
@@ -28,6 +32,8 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
     - `cd path/to/cloned/folder`
     - `pipenv install`
     - `pipenv run python main.py`
+    - `gunicorn --worker-class eventlet -w 1 --access-logfile - module:app` s ukazováním requestů
+    - `gunicorn --worker-class eventlet -w 1 module:app` bez requestů
 
 ### Windows
 
@@ -38,5 +44,6 @@ Nemám windows, prosím odzkoušet a doplnit sem / říct Pípovi
 - Flask
 - Flask-SocketIO
 - natvrdo stažený bootstrap a socketio.js proto, aby server fungoval zcela bez internetu.
+- gunicorn s workerem eventlet
 
 by Josef Lát

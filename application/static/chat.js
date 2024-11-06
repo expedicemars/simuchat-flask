@@ -9,6 +9,10 @@ message_input.addEventListener("keydown", handleKeyPress)
 
 let last_message_datetime = new Date()
 let modal_is_active = false
+let is_admin = false
+if (document.getElementById("is_admin").value == "True") {
+    is_admin = true
+}
 
 let modal = document.getElementById("upozorneni_modal")
 let modal_content = document.getElementById("modal_content")
@@ -20,7 +24,6 @@ window.onclick = function(event) {
 }
 
 
-
 old_messages.forEach(element => {
     createMessage(element.name, element.text, element.time, element.type)
 });
@@ -29,20 +32,29 @@ socketio.on("message", (data) => {
     createMessage(data.name, data.text, data.time, data.type)
     if (data.type == "connection") {
     } else {
+
         let current_datetime = new Date()
         let delta = (current_datetime - last_message_datetime) / 1000
-        if (delta > prodleva && !modal_is_active) {
+        const isDeltaValid = delta > prodleva;
+        const isModalInactive = !modal_is_active;
+        const isOrgMessageForNonAdmin = (data.type == "org" && !is_admin);
+        const isPosadkaMessageForAdmin = (data.type == "posadka" && is_admin);
+
+        if (isDeltaValid && isModalInactive && (isOrgMessageForNonAdmin || isPosadkaMessageForAdmin)) {
             modal.style.display = "block"
             modal_is_active = true
-            let popup_message = "Zpráva z " + data.time + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
+            let popup_message = "Zpráva v čase " + data.time + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
             document.getElementById("popup_message").innerText = popup_message
+            last_message_datetime = new Date()
         } else {
             last_message_datetime = new Date()
         }
     }
 })
 
+// TODO tohle spis nefunguje
 socketio.on("archivovani", (data) => {
+    console.log("probehl archivovani")
     while (messages_div.firstChild && data["pocet"] < messages_div.children.length) {
         messages_div.removeChild(messages_div.firstChild);
     }
@@ -72,6 +84,8 @@ function sendMessage() {
     socketio.emit("message", {text: message_input.value})
     message_input.value = ""
     last_message_datetime = new Date()
+    modal.style.display = "none"
+    modal_is_active = false
 }
 
 

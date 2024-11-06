@@ -7,7 +7,9 @@
     <form method="post" class="form" id="form">
         <label for="admin_name" class="custom-label">Jméno komunikujícího admina</label>
         <input id="admin_name" type="text" name="admin_name" class="form-control admin-input my-2">
-        <button type="button" value="whatever" class="btn custom-button mb-5" onclick="pressed_button()">Připojit se</button>
+        <button type="submit" value="whatever" class="btn custom-button mb-2" name="connect_admin">Připojit se</button>
+        <button type="submit" value="silent" class="btn custom-button mb-5" name="connect_admin">Připojit se potichu</button>
+
     </form>
 </section>
 
@@ -20,11 +22,11 @@
 
         <label class="custom-label">Nastavit datum a čas začátku simulace</label>
         <small>Zprávy zobrazují čas odeslání relativně k tomuto času</small>
-        <input id="pocet_zprav" type="number" name="rok" placeholder="rok" value="{{datetime_zacatku.year}}" class="form-control admin-input my-2">
-        <input id="pocet_zprav" type="number" name="mesic" placeholder="měsíc" value="{{datetime_zacatku.month}}" class="form-control admin-input my-2">
-        <input id="pocet_zprav" type="number" name="den" placeholder="den" value="{{datetime_zacatku.day}}" class="form-control admin-input my-2">
-        <input id="pocet_zprav" type="number" name="hodina" placeholder="hodina" value="{{datetime_zacatku.hour}}" class="form-control admin-input my-2">
-        <input id="pocet_zprav" type="number" name="minuta" placeholder="minuta" value="{{datetime_zacatku.minute}}" class="form-control admin-input my-2">
+        <input type="number" name="rok" placeholder="rok" value="{{datetime_zacatku.year}}" class="form-control admin-input my-2">
+        <input type="number" name="mesic" placeholder="měsíc" value="{{datetime_zacatku.month}}" class="form-control admin-input my-2">
+        <input type="number" name="den" placeholder="den" value="{{datetime_zacatku.day}}" class="form-control admin-input my-2">
+        <input type="number" name="hodina" placeholder="hodina" value="{{datetime_zacatku.hour}}" class="form-control admin-input my-2">
+        <input type="number" name="minuta" placeholder="minuta" value="{{datetime_zacatku.minute}}" class="form-control admin-input my-2">
         <button type="submit" name="datum_btn" value="whatever" class="btn custom-button">Uložit</button>
     </form>
 </section>
@@ -32,22 +34,29 @@
 <section class="border rounded-3 border-dark border-2 main-admin p-3 text-center my-4">
     <h1>Zprávy</h1>
     <form method="post" class="form">
-        <label for="pocet_zprav" class="custom-label">Počet zpráv, které se zachovají přístupné po archivaci</label>
+        <label for="pocet_zprav_manual" class="custom-label">Počet zpráv, které se zachovají přístupné po archivaci</label>
         <small>Starší zprávy jsou archivovány a jsou přístupné ve složce</small>
-        <input id="pocet_zprav" type="number" name="pocet_zprav" class="form-control admin-input my-2" value="{{pocet_zprav}}">
-        <button type="submit" name="pocet_zprav_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
+        <input id="pocet_zprav_manual" type="number" name="pocet_zprav_manual" class="form-control admin-input my-2" value="{{pocet_zprav_manual}}">
+        <button type="submit" name="pocet_zprav_manual_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
+        
+        <label for="pocet_zprav_auto" class="custom-label">Počet zpráv, při kterém se zprávy automaticky archivují</label>
+        <small>Starší zprávy jsou archivovány a jsou přístupné ve složce</small>
+        <input id="pocet_zprav_auto" type="number" name="pocet_zprav_auto" class="form-control admin-input my-2" value="{{pocet_zprav_auto}}">
+        <button type="submit" name="pocet_zprav_auto_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
 
-        <label for="archivovat" class="custom-label">Archivovat staré zprávy</label>
-        <small>V okně komunikace zbyde jen posledních {{pocet_zprav}} zpráv.</small>
+        <label for="archivovat" class="custom-label">Manuálně archivovat staré zprávy</label>
+        <small>V okně komunikace zbyde jen posledních {{pocet_zprav_manual}} zpráv.</small>
         <small>Ve chvíli načtení této stránky je v komunikaci {{aktualni_pocet_zprav}} zpráv.</small>
         <button type="submit" name="archivovat" value="whatever" class="btn custom-button mb-5">Archivovat</button>
 
         <label for="archivovat" class="custom-label">Informace o připojených a odpojených organizátorech</label>
         <small>V tuto chvíli se {{pripojovani_3ojc}}, zda se organizátoři připojují a odpojují.</small>
+        <small>Jednorázově se dá připojit a odpojit potichu pomocí tlačítka nahoře.</small>
         <button type="submit" name="pripojovani" value="whatever" class="btn custom-button mb-5">{{pripojovani_inf}}</button>
 
         <label for="archivovat" class="custom-label">Upozornění na novou zprávu</label>
         <small>Nová zpráva, která přišla {{prodleva}} sekund po předchozí a není o připojení, způsobí všem ostatním pop-up.</small>
+        <small>Tato změna bude platná po opětovném načtení aktivních chatů.</small>
         <input type="number" name="prodleva" class="form-control admin-input my-2" value="{{prodleva}}">
         <button type="submit" name="prodleva_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
         
@@ -68,15 +77,5 @@
         
     </form>
 </section>
-
-
-
-<script type="text/javascript">
-    function pressed_button() {
-        if (!document.getElementById("admin_name").value == "") {
-            document.getElementById("form").submit()
-        }
-    }
-</script> 
 
 {% endblock %}
