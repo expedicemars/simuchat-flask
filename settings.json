@@ -1,11 +1,12 @@
 {
     "jmena_posadky": [
         "Test\r",
-        "test"
+        "test\r",
+        "a"
     ],
-    "pocet_zprav": 200,
-    "datetime_zacatku": "2023-12-01T20:00:00",
+    "pocet_zprav": 50,
+    "datetime_zacatku": "2024-11-10T20:00:00",
     "zobrazaovani_pripojeni_adminu": true,
-    "port": 5000,
-    "prodleva": 120
+    "port": 8000,
+    "prodleva": 10
 }

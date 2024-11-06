@@ -14,7 +14,7 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
 ### Organizátoři
 
 - navštíví IP serveru `/admin` a zadají heslo `hroch314`
-- počítač, který slouží jako server, může použít `127.0.0.1:5000/admin`, po přihlášení je tam vidět IP pro ostatní
+- počítač, který slouží jako server, může použít `127.0.0.1:8000/admin`, po přihlášení je tam vidět IP pro ostatní
 - nastaví jména členů posádky, začátek simulace a další nastavení.
 
 ## Kroky pro spuštění
@@ -28,6 +28,8 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
     - `cd path/to/cloned/folder`
     - `pipenv install`
     - `pipenv run python main.py`
+    - `gunicorn --worker-class eventlet -w 1 --access-logfile - module:app` s ukazováním requestů
+    - `gunicorn --worker-class eventlet -w 1 module:app` bez requestů
 
 ### Windows
 
