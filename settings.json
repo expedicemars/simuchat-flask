@@ -1,8 +1,6 @@
 {
     "jmena_posadky": [
-        "Test\r",
-        "test\r",
-        "a"
+        "a b"
     ],
     "pocet_zprav_manual": 50,
     "pocet_zprav_auto": 200,

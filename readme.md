@@ -32,8 +32,8 @@ Archivovat zprávy je nutné, protože dlouhá načtená historie způsobuje zpo
     - `cd path/to/cloned/folder`
     - `pipenv install`
     - `pipenv run python main.py`
-    - `gunicorn --worker-class eventlet -w 1 --access-logfile - module:app` s ukazováním requestů
-    - `gunicorn --worker-class eventlet -w 1 module:app` bez requestů
+    - `gunicorn --worker-class eventlet -w 1 --access-logfile - application:app` s ukazováním requestů
+    - `gunicorn --worker-class eventlet -w 1 application:app` bez requestů
 
 ### Windows
 
