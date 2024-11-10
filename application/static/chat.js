@@ -67,7 +67,7 @@ function createMessage(name, text, time, type) {
         <span class="name">
             ${name}
         </span>
-        <span class="text" id="${id}">
+        <span class="text" id="${id}">${text}
         </span>
         <span class="date">
             ${time}
@@ -75,7 +75,7 @@ function createMessage(name, text, time, type) {
     </div>
     `
     messages_div.innerHTML += new_message
-    document.getElementById("text-" + name + "-" + time).innerText = text // kvuli tomu bordelu s newlines
+    // document.getElementById("text-" + name + "-" + time).innerText = text // kvuli tomu bordelu s newlines
     messages_div.scrollTop = messages_div.scrollHeight
 }
 
