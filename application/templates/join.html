@@ -1,13 +1,13 @@
 {% extends "index.html" %}
 {% block content %}
-<section class="border rounded-3 border-dark border-2 main p-3 text-center h-100">
+<section class="border rounded-3 border-dark border-2 main p-3 text-center">
 
     <h1 class="heading" title="Expedice Mars Mission Control">EMMC komunikace</h1>
     
     <p class="join-as">připojit se jako:</p>
     <form method="post">
         {% for jmeno in jmena_posadky %}
-            <button class="btn custom-button my-2" value={{jmeno}} name="jmeno">{{jmeno}}</button><br>
+            <button class="btn custom-button my-2" value="{{jmeno}}" name="jmeno">{{jmeno}}</button><br>
         {% endfor %}
     </form>
 </section>
