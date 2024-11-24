@@ -1,0 +1,12 @@
+{
+      "jmena_posadky": [
+        "example user 1",
+        "example user 2"
+    ],
+    "pocet_zprav_manual": 50,
+    "pocet_zprav_auto": 5,
+    "datetime_zacatku": "2024-11-10T20:00:00",
+    "zobrazaovani_pripojeni_adminu": true,
+    "port": 8000,
+    "prodleva": 120
+}
