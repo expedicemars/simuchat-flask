@@ -10,4 +10,4 @@ def history_path():
     return messages_history_folder_path() / "history.json"
 
 def settings_path():
-    return Path.cwd() / "settings.json"
+    return Path.cwd() / "settings/settings.json"
