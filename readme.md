@@ -23,7 +23,7 @@ Archivovat zprávy je nutné, protože dlouhá načtená historie způsobuje zpo
 
 ## Kroky pro spuštění
 
-### MacOS
+### MacOS / Linux
 
 1. nainstalovat python. Dělal jsem to na 3.11 a mělo by to fungovat na novějších.
 2. clone tohoto repa někam do složky
@@ -38,6 +38,13 @@ Archivovat zprávy je nutné, protože dlouhá načtená historie způsobuje zpo
 ### Windows
 
 Nemám windows, prosím odzkoušet a doplnit sem / říct Pípovi
+
+### Docker
+1. Nainstalovat docker a docker-compose
+2. clone tohoto repa někam do složky
+3. v terminálu:
+    - cd path/to/cloned/folder
+    - sudo docker-compose up -d --build
 
 ## Použité technologie
 

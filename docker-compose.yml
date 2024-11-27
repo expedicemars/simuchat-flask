@@ -1,0 +1,10 @@
+services: 
+  web: 
+    build:
+     context: ./
+     target: builder
+    ports: 
+      - '8000:8000'
+    volumes:
+      - ./messages_history:/simuchat/messages_history
+      - ./settings:/simuchat/settings
