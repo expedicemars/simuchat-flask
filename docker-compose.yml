@@ -1,11 +1,11 @@
 services: 
   web: 
     build:
-     context: ./
-     target: builder
+      context: ./
+      target: builder
     ports: 
-     '8000:8000'
+      - '8000:8000'
     restart: always
     volumes:
-     ./messages_history:/simuchat/messages_history
-     ./settings:/simuchat/settings
+      - ./messages_history:/simuchat/messages_history
+      - ./settings:/simuchat/settings
