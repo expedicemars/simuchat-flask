@@ -18,7 +18,6 @@ def join():
         return render_template("join.html", jmena_posadky = get_jmena_posadky_for_user())
     else:
         if jmeno := request.form.get("jmeno"):
-            print(jmeno)
             session["jmeno"] = f"{jmeno}@posadka"
             return redirect(url_for("chat"))
 
