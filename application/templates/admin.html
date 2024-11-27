@@ -39,15 +39,15 @@
         <input id="pocet_zprav_manual" type="number" name="pocet_zprav_manual" class="form-control admin-input my-2" value="{{pocet_zprav_manual}}">
         <button type="submit" name="pocet_zprav_manual_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
         
-        <label for="pocet_zprav_auto" class="custom-label">Počet zpráv, při kterém se zprávy automaticky archivují</label>
-        <small>Starší zprávy jsou archivovány a jsou přístupné ve složce</small>
-        <input id="pocet_zprav_auto" type="number" name="pocet_zprav_auto" class="form-control admin-input my-2" value="{{pocet_zprav_auto}}">
-        <button type="submit" name="pocet_zprav_auto_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
-
         <label for="archivovat" class="custom-label">Manuálně archivovat staré zprávy</label>
         <small>V okně komunikace zbyde jen posledních {{pocet_zprav_manual}} zpráv.</small>
         <small>Ve chvíli načtení této stránky je v komunikaci {{aktualni_pocet_zprav}} zpráv.</small>
         <button type="submit" name="archivovat" value="whatever" class="btn custom-button mb-5">Archivovat</button>
+
+        <label for="pocet_zprav_auto" class="custom-label">Počet zpráv, při kterém se zprávy automaticky archivují</label>
+        <small>Starší zprávy jsou archivovány a jsou přístupné ve složce</small>
+        <input id="pocet_zprav_auto" type="number" name="pocet_zprav_auto" class="form-control admin-input my-2" value="{{pocet_zprav_auto}}">
+        <button type="submit" name="pocet_zprav_auto_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
 
         <label for="archivovat" class="custom-label">Informace o připojených a odpojených organizátorech</label>
         <small>V tuto chvíli se {{pripojovani_3ojc}}, zda se organizátoři připojují a odpojují.</small>
@@ -59,6 +59,11 @@
         <small>Tato změna bude platná po opětovném načtení aktivních chatů.</small>
         <input type="number" name="prodleva" class="form-control admin-input my-2" value="{{prodleva}}">
         <button type="submit" name="prodleva_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
+
+        <label for="archivovat_vse" class="custom-label">Archivovat všechny současné zprávy</label>
+        <small>Použitelné zejména při začátku simulace - vyčistí současnou historii načtených zpráv</small>
+        <button type="submit" name="archivovat_vse" value="whatever" class="btn custom-button mb-5">Archivovat</button>
+        
         
     </form>
 </section>

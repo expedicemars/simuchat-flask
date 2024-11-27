@@ -21,6 +21,18 @@ def pretty_cas_zpravy(time: datetime = None) -> str:
     sec = int(leftover)
     return f"{sign}{str(hours).rjust(2, '0')} : {str(minutes).rjust(2, '0')} : {str(sec).rjust(2, '0')}"
 
+def archivovat_vse() -> None:
+    with open(current_messages_path()) as current:
+        current: list[dict] = json.load(current)
+    with open(history_path()) as history:
+        history: list[dict] = json.load(history)
+    
+    new_history = history + current
+    with open(current_messages_path(), "w") as c:
+        c.write(json.dumps([], indent=4))
+    with open(history_path(), "w") as h:
+        h.write(json.dumps(new_history, indent=4))
+
 
 def archivovat() -> None:
     with open(current_messages_path()) as current:
