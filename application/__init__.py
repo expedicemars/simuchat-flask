@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_socketio import SocketIO
 from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav_manual, set_datetime_zacatku, get_pocet_zprav_manual, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva, set_pocet_zprav_auto, get_pocet_zprav_auto
-from .message import Message, archivovat
+from .message import Message, archivovat, archivovat_vse
 from .connections import get_ip
 import getmac
 
@@ -18,7 +18,6 @@ def join():
         return render_template("join.html", jmena_posadky = get_jmena_posadky_for_user())
     else:
         if jmeno := request.form.get("jmeno"):
-            print(jmeno)
             session["jmeno"] = f"{jmeno}@posadka"
             return redirect(url_for("chat"))
 
@@ -107,6 +106,9 @@ def admin():
             return redirect(url_for("admin"))
         elif request.form.get("prodleva_btn"):
             set_prodleva(int(request.form.get("prodleva")))
+            return redirect(url_for("admin"))
+        elif request.form.get("archivovat_vse"):
+            archivovat_vse()
             return redirect(url_for("admin"))
 
             

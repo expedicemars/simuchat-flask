@@ -1,7 +1,13 @@
-from .paths import settings_path
+from .paths import settings_path, settings_example_path
 import json
 from datetime import datetime
 
+def ensure_settings() -> None:
+    if not settings_path().exists():
+        with open(settings_example_path()) as file:
+            settings = file.read()
+        with open(settings_path(), "w") as file:
+            file.write(settings)
 
 def get_settings() -> dict:
     with open(settings_path()) as file:
