@@ -3,12 +3,17 @@ from flask_socketio import SocketIO
 from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_pocet_zprav_manual, set_datetime_zacatku, get_pocet_zprav_manual, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva, set_pocet_zprav_auto, get_pocet_zprav_auto
 from .message import Message, archivovat, archivovat_vse
 from .connections import get_ip
+from .create_files import ensure_messages_files
+from .settings_handling import ensure_settings
 import getmac
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sprcha-je-jen-ochoceny-vodopad'
 socketio = SocketIO(app)
+
+ensure_messages_files()
+ensure_settings()
 
 
 @app.route("/", methods=["GET", "POST"])
