@@ -30,10 +30,12 @@ Archivovat zprávy je nutné, protože dlouhá načtená historie způsobuje zpo
 3. v terminálu:
     - `pip install pipenv`
     - `cd path/to/cloned/folder`
-    - `pipenv install`
-    - `pipenv run python main.py` bez gunicornu
-    - `gunicorn --worker-class eventlet -w 1 --access-logfile - -b 0.0.0.0:8000 application:app` s ukazováním requestů
-    - `gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:8000 application:app` bez requestů
+    - `pipenv install` pro instalaci knihoven
+    - `pipenv shell` pro zapnutí venv
+4. Několik možností spuštění:
+    - (dopoučeno): Gunicorn: `gunicorn --worker-class eventlet -w 1 --access-logfile - -b 0.0.0.0:8000 application:app`
+    - Flask: `pipenv run python main.py`
+    - Gunicorn bez requestů: `gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:8000 application:app`
 
 ### Windows
 

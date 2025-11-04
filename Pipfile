@@ -10,3 +10,6 @@ get-mac = "*"
 colorama = "*"
 gunicorn = "*"
 eventlet = "*"
+waitress = "*"
+
+[dev-packages]
