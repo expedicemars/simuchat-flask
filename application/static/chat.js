@@ -52,14 +52,6 @@ socketio.on("message", (data) => {
     }
 })
 
-// TODO tohle spis nefunguje
-socketio.on("archivovani", (data) => {
-    console.log("probehl archivovani")
-    while (messages_div.firstChild && data["pocet"] < messages_div.children.length) {
-        messages_div.removeChild(messages_div.firstChild);
-    }
-})
-
 function createMessage(name, text, time, type) {
     let id = "text-" + name + "-" + time
     let new_message = `

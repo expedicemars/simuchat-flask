@@ -1,14 +1,6 @@
 # Komunikace pro simulace Expedice Mars
 Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti tak, aby nebyl potřeba internet. 
 
-## Archivování zpráv
-
-Archivovat zprávy je nutné, protože dlouhá načtená historie způsobuje zpomalení aplikace. Archivuje se buď manuálně, nebo automaticky.
-
-## TODO
-
-- přidělat kroky ke spuštění
-
 ## Použití
 
 ### Posádka
