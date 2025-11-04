@@ -1,23 +1,6 @@
 from datetime import datetime
 import json
-from .settings_handling import get_datetime_zacatku
-import flask_socketio
-
-def pretty_cas_zpravy(time: datetime = None) -> str:
-    datetime_zacatku = get_datetime_zacatku()
-    datetime_zpravy = time if time else datetime.now()
-    dt = datetime_zpravy - datetime_zacatku
-    diff = dt.total_seconds()
-    sign = ""
-    if diff < 0:
-        sign = "- "
-    diff = abs(diff)
-    hours = int(diff / 3600)
-    leftover = diff - hours*3600
-    minutes = int(leftover/60)
-    leftover = leftover - minutes*60
-    sec = int(leftover)
-    return f"{sign}{str(hours).rjust(2, '0')} : {str(minutes).rjust(2, '0')} : {str(sec).rjust(2, '0')}"
+from application.helpers import pretty_cas_zpravy
 
 
 class Message():

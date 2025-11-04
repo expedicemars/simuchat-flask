@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import getmac
 from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_datetime_zacatku, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva
 from .message import Message
-from .connections import get_ip
+from .helpers import get_ip
 from .settings_handling import ensure_settings
 
 db = SQLAlchemy()
