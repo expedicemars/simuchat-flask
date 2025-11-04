@@ -10,6 +10,6 @@ get-mac = "*"
 colorama = "*"
 gunicorn = "*"
 eventlet = "*"
-waitress = "*"
+flask-sqlalchemy = "*"
 
 [dev-packages]
