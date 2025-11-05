@@ -8,6 +8,8 @@
     <script src="{{url_for('static', filename='bootstrap.bundle.js')}}"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <script type="module" src="{{url_for('static', filename='http_get.js')}}"></script>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico')}}">
 </head>
 <body class="p-4">
     {% block content %}

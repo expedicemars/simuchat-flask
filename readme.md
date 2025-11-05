@@ -25,7 +25,7 @@ Cílem projektu je zajistit komunikaci mezi posádkou a organizátory po síti t
     - `pipenv install` pro instalaci knihoven
     - `pipenv shell` pro zapnutí venv
 4. Několik možností spuštění:
-    - (dopoučeno): Gunicorn: `gunicorn -k eventlet -w 1 -b 0.0.0.0:8000 --access-logfile - 'application:create_app()'`
+    - (dopoučeno): Gunicorn: `gunicorn -k eventlet -w 1 -b 0.0.0.0:8000 --access-logfile - --access-logformat '%(h)s %(m)s %(s)s %(U)s' 'application:create_app()'`
     - Gunicorn bez requestů: `gunicorn -k eventlet -w 1 -b 0.0.0.0:8000 'application:create_app()'`
 
 ### Windows

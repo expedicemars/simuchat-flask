@@ -1,6 +1,6 @@
 import socket
-from .settings_handling import get_datetime_zacatku
-import datetime
+from application.settings_handling import get_datetime_zacatku
+from datetime import datetime
 
 
 def get_ip():

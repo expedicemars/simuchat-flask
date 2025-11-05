@@ -44,7 +44,20 @@
         <small>Tato změna bude platná po opětovném načtení aktivních chatů.</small>
         <input type="number" name="prodleva" class="form-control admin-input my-2" value="{{prodleva}}">
         <button type="submit" name="prodleva_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
-        
+
+        <label class="custom-label">Načíst zprávy při připojení do chatu</label>
+        <small>Kolik posledních zpráv se má načíst?</small>
+        <input type="number" name="last_n" class="form-control admin-input my-2" value="{{last_n}}">
+        <button type="submit" name="last_n_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
+
+        <label class="custom-label">Export všech zpráv</label>
+        <small>Vygeneruje .xlsx a stáhne jej.</small>
+        <button type="submit" name="export" value="whatever" class="btn custom-button mb-5">Exportovat</button>
+
+        <label class="custom-label">Smazat všechny zprávy</label>
+        <small>Jednorázově smaže všechny zprávy, užitečné zejména před simulací pro vyčištění.</small>
+        <button type="submit" name="delete_all" value="whatever" class="btn custom-button mb-5" onclick="return confirm('Opravdu chcete smazat všechny zprávy?');">Smazat</button>
+
     </form>
 </section>
 

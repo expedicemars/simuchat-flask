@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import getmac
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_datetime_zacatku, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva
-from .message import Message
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_datetime_zacatku, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva, set_last_n, get_last_n
 from .helpers import get_ip
 from .settings_handling import ensure_settings
+from datetime import datetime
+import json
+
 
 db = SQLAlchemy()
 socketio = SocketIO()
@@ -16,12 +18,16 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.config['SECRET_KEY'] = "sprcha-je-jen-ochoceny-vodopad"
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///message_database.db"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle' : 280}
     
     socketio.init_app(app)
     db.init_app(app)
-
+    
+    from application.message import Message
+    
+    with app.app_context():
+        db.create_all()
 
 
     @app.route("/", methods=["GET", "POST"])
@@ -30,16 +36,17 @@ def create_app() -> Flask:
         if request.method == "GET":
             return render_template("join.html", jmena_posadky = get_jmena_posadky_for_user())
         else:
-            if jmeno := request.form.get("jmeno"):
-                session["jmeno"] = f"{jmeno}@posadka"
+            if name := request.form.get("name"):
+                session["name"] = f"{name}@posadka"
                 return redirect(url_for("chat"))
 
 
     @app.route("/chat")
     def chat():
-        if not session.get("jmeno"):
+        if not session.get("name"):
             return redirect(url_for("join"))
-        return render_template("chat.html", komunikacni_jmeno = session.get("jmeno"), messages = Message.get_history_on_join(), prodleva = get_prodleva(), is_admin = session.get("admin"))
+        return render_template("chat.html", name = session.get("name"), messages = Message.get_history_on_join(), prodleva = get_prodleva(), is_admin = session.get("admin"))
+
 
     @app.route("/admin_login", methods=["GET", "POST"])
     def admin_login():
@@ -71,6 +78,7 @@ def create_app() -> Flask:
                     mac_adress = getmac.get_mac_address(),
                     port = get_port(), 
                     prodleva = get_prodleva(),
+                    last_n = get_last_n()
                 )
         else:
             if request.form.get("save_names"):
@@ -78,14 +86,14 @@ def create_app() -> Flask:
                 return redirect(url_for("admin"))
             
             elif mode := request.form.get("connect_admin"):
-                jmeno = request.form.get("admin_name")
-                if jmeno == "":
+                name = request.form.get("admin_name")
+                if name == "":
                     return redirect(url_for("admin"))
                 else:
-                    jmeno = jmeno + "@EMMC"
+                    name = name + "@EMMC"
                     if mode == "silent":
                         session["mode"] = "silent"
-                    session["jmeno"] = jmeno
+                    session["name"] = name
                     return redirect(url_for("chat"))
             
             elif request.form.get("datum_btn"):
@@ -103,20 +111,43 @@ def create_app() -> Flask:
             elif request.form.get("prodleva_btn"):
                 set_prodleva(int(request.form.get("prodleva")))
                 return redirect(url_for("admin"))
-                
+            
+            elif request.form.get("last_n_btn"):
+                set_last_n(int(request.form.get("last_n")))
+                return redirect(url_for("admin"))
+            
+            elif request.form.get("export"):
+                bytes = Message.export_messages()
+                filename = f"messages_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+                return send_file(bytes, as_attachment=True, download_name=filename, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+            elif request.form.get("delete_all"):
+                Message.delete_all()
+                return redirect(url_for("admin"))
+      
+    
+    @app.route("/load_chat")
+    def get_last_messages():
+        result = {
+            "prodleva": get_prodleva(),
+            "last_messages": Message.get_history_on_join()
+        }
+        return json.dumps(result)
+              
+
     @app.errorhandler(404)
     def not_found(e):
         return render_template("not_found.html")
 
 
     @socketio.on("connect")
-    def connect():
+    def connect(auth=None):
         if session.get("admin") and not get_pripojovani():
             pass
         if session.get("mode") == "silent":
             pass
         else:
-            m = Message(name=session.get("jmeno"), text="joined.", type="connection")
+            m = Message(author=session.get("name"), content="joined.", category="connection")
             m.save_and_send()
             
 
@@ -127,15 +158,15 @@ def create_app() -> Flask:
         if session.get("mode") == "silent":
             pass
         else:
-            m = Message(name=session.get("jmeno"), text="disconnected.", type="connection")
+            m = Message(author=session.get("name"), content="disconnected.", category="connection")
             m.save_and_send()
 
 
     @socketio.on("message")
     def message(data):
-        text = data["text"]
-        type = "org" if session.get("admin") else "posadka"
-        m = Message(name=session.get("jmeno"), text=text, type=type)
+        content = data["content"]
+        category = "org" if session.get("admin") else "posadka"
+        m = Message(author=session.get("name"), content=content, category=category)
         m.save_and_send()
 
     return app

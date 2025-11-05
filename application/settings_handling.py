@@ -9,6 +9,20 @@ def ensure_settings() -> None:
             settings = file.read()
         with open(settings_path(), "w") as file:
             file.write(settings)
+    else:
+        # add missing keys from example
+        with open(settings_example_path()) as file:
+            example_settings = json.load(file)
+        with open(settings_path()) as file:
+            current_settings = json.load(file)
+        updated = False
+        for key, value in example_settings.items():
+            if key not in current_settings:
+                current_settings[key] = value
+                updated = True
+        if updated:
+            with open(settings_path(), "w") as file:
+                file.write(json.dumps(current_settings, indent=4))
 
 
 def get_settings() -> dict:
@@ -84,4 +98,16 @@ def get_prodleva() -> int:
 def set_prodleva(prodleva: int) -> None:
     settings = get_settings()
     settings["prodleva"] = prodleva
+    set_settings(settings)
+    
+    
+def get_last_n() -> int:
+    settings = get_settings()
+    print(settings["last_n"])
+    return int(settings["last_n"])
+
+
+def set_last_n(last_n: int) -> None:
+    settings = get_settings()
+    settings["last_n"] = last_n
     set_settings(settings)

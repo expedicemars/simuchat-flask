@@ -68,14 +68,15 @@ h1{
 .message{
     display: flex;
 }
-.message .name{
+.message .author{
     font-weight: bold;
     margin-right: 1rem;
 }
-.message .text{
+.message .content{
     text-align: left;
+    white-space: pre-wrap;
 }
-.message .date{
+.message .datetime{
     margin-left: auto;
     white-space: nowrap;
 }
