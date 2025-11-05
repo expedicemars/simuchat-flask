@@ -2,12 +2,28 @@ from .paths import settings_path, settings_example_path
 import json
 from datetime import datetime
 
+
 def ensure_settings() -> None:
     if not settings_path().exists():
         with open(settings_example_path()) as file:
             settings = file.read()
         with open(settings_path(), "w") as file:
             file.write(settings)
+    else:
+        # add missing keys from example
+        with open(settings_example_path()) as file:
+            example_settings = json.load(file)
+        with open(settings_path()) as file:
+            current_settings = json.load(file)
+        updated = False
+        for key, value in example_settings.items():
+            if key not in current_settings:
+                current_settings[key] = value
+                updated = True
+        if updated:
+            with open(settings_path(), "w") as file:
+                file.write(json.dumps(current_settings, indent=4))
+
 
 def get_settings() -> dict:
     with open(settings_path()) as file:
@@ -34,6 +50,7 @@ def set_jmena_posadky_from_admin(data) -> None:
     settings["jmena_posadky"] = data.split("\n")
     set_settings(settings)
         
+        
 def set_datetime_zacatku(request_form: dict) -> None:
     rok = int(request_form.get("rok"))
     mesic = int(request_form.get("mesic"))
@@ -51,47 +68,46 @@ def get_datetime_zacatku() -> datetime:
     return datetime.fromisoformat(settings["datetime_zacatku"])
 
 
-def set_pocet_zprav_manual(pocet_zprav_manual: int) -> None:
-    settings = get_settings()
-    settings["pocet_zprav_manual"] = int(pocet_zprav_manual)
-    set_settings(settings)
-    
-def set_pocet_zprav_auto(pocet_zprav_auto: int) -> None:
-    settings = get_settings()
-    settings["pocet_zprav_auto"] = int(pocet_zprav_auto)
-    set_settings(settings)
-
-def get_pocet_zprav_manual() -> int:
-    settings = get_settings()
-    return int(settings["pocet_zprav_manual"])
-
-def get_pocet_zprav_auto() -> int:
-    settings = get_settings()
-    return int(settings["pocet_zprav_auto"])
-
 def toggle_pripojovani() -> int:
     settings = get_settings()
     settings["zobrazaovani_pripojeni_adminu"] = not settings["zobrazaovani_pripojeni_adminu"]
     set_settings(settings)
     
+    
 def get_pripojovani() -> bool:
     settings = get_settings()
     return settings["zobrazaovani_pripojeni_adminu"]
 
+
 def get_port() -> int:
     settings = get_settings()
     return int(settings["port"])
+
 
 def set_port(port: int) -> None:
     settings = get_settings()
     settings["port"] = port
     set_settings(settings)
 
+
 def get_prodleva() -> int:
     settings = get_settings()
     return int(settings["prodleva"])
 
+
 def set_prodleva(prodleva: int) -> None:
     settings = get_settings()
     settings["prodleva"] = prodleva
+    set_settings(settings)
+    
+    
+def get_last_n() -> int:
+    settings = get_settings()
+    print(settings["last_n"])
+    return int(settings["last_n"])
+
+
+def set_last_n(last_n: int) -> None:
+    settings = get_settings()
+    settings["last_n"] = last_n
     set_settings(settings)

@@ -18,7 +18,7 @@
     <form method="post" class="form">
         <label class="custom-label">Upravit členy posádky</label>
         <textarea name="jmena_posadky", rows="5" class="textarea rounded-3 mb-2">{{jmena_posadky}}</textarea>
-        <button type="submit" name="save" value="whatever" class="btn custom-button mb-5">Uložit</button>
+        <button type="submit" name="save_names" value="whatever" class="btn custom-button mb-5">Uložit</button>
 
         <label class="custom-label">Nastavit datum a čas začátku simulace</label>
         <small>Zprávy zobrazují čas odeslání relativně k tomuto času</small>
@@ -34,37 +34,30 @@
 <section class="border rounded-3 border-dark border-2 main-admin p-3 text-center my-4">
     <h1>Zprávy</h1>
     <form method="post" class="form">
-        <label for="pocet_zprav_manual" class="custom-label">Počet zpráv, které se zachovají přístupné po archivaci</label>
-        <small>Starší zprávy jsou archivovány a jsou přístupné ve složce</small>
-        <input id="pocet_zprav_manual" type="number" name="pocet_zprav_manual" class="form-control admin-input my-2" value="{{pocet_zprav_manual}}">
-        <button type="submit" name="pocet_zprav_manual_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
-        
-        <label for="archivovat" class="custom-label">Manuálně archivovat staré zprávy</label>
-        <small>V okně komunikace zbyde jen posledních {{pocet_zprav_manual}} zpráv.</small>
-        <small>Ve chvíli načtení této stránky je v komunikaci {{aktualni_pocet_zprav}} zpráv.</small>
-        <button type="submit" name="archivovat" value="whatever" class="btn custom-button mb-5">Archivovat</button>
-
-        <label for="pocet_zprav_auto" class="custom-label">Počet zpráv, při kterém se zprávy automaticky archivují</label>
-        <small>Starší zprávy jsou archivovány a jsou přístupné ve složce</small>
-        <input id="pocet_zprav_auto" type="number" name="pocet_zprav_auto" class="form-control admin-input my-2" value="{{pocet_zprav_auto}}">
-        <button type="submit" name="pocet_zprav_auto_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
-
-        <label for="archivovat" class="custom-label">Informace o připojených a odpojených organizátorech</label>
-        <small>V tuto chvíli se {{pripojovani_3ojc}}, zda se organizátoři připojují a odpojují.</small>
+        <label class="custom-label">Informace o připojených a odpojených organizátorech</label>
+        <small>V tuto chvíli se {{pripojovani_sloveso}}, zda se organizátoři připojují a odpojují.</small>
         <small>Jednorázově se dá připojit a odpojit potichu pomocí tlačítka nahoře.</small>
-        <button type="submit" name="pripojovani" value="whatever" class="btn custom-button mb-5">{{pripojovani_inf}}</button>
+        <button type="submit" name="admin_connect_visible" value="whatever" class="btn custom-button mb-5">{{pripojovani_button}}</button>
 
-        <label for="archivovat" class="custom-label">Upozornění na novou zprávu</label>
+        <label class="custom-label">Upozornění na novou zprávu</label>
         <small>Nová zpráva, která přišla {{prodleva}} sekund po předchozí a není o připojení, způsobí všem ostatním pop-up.</small>
         <small>Tato změna bude platná po opětovném načtení aktivních chatů.</small>
         <input type="number" name="prodleva" class="form-control admin-input my-2" value="{{prodleva}}">
         <button type="submit" name="prodleva_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
 
-        <label for="archivovat_vse" class="custom-label">Archivovat všechny současné zprávy</label>
-        <small>Použitelné zejména při začátku simulace - vyčistí současnou historii načtených zpráv</small>
-        <button type="submit" name="archivovat_vse" value="whatever" class="btn custom-button mb-5">Archivovat</button>
-        
-        
+        <label class="custom-label">Načíst zprávy při připojení do chatu</label>
+        <small>Kolik posledních zpráv se má načíst?</small>
+        <input type="number" name="last_n" class="form-control admin-input my-2" value="{{last_n}}">
+        <button type="submit" name="last_n_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>
+
+        <label class="custom-label">Export všech zpráv</label>
+        <small>Vygeneruje .xlsx a stáhne jej.</small>
+        <button type="submit" name="export" value="whatever" class="btn custom-button mb-5">Exportovat</button>
+
+        <label class="custom-label">Smazat všechny zprávy</label>
+        <small>Jednorázově smaže všechny zprávy, užitečné zejména před simulací pro vyčištění.</small>
+        <button type="submit" name="delete_all" value="whatever" class="btn custom-button mb-5" onclick="return confirm('Opravdu chcete smazat všechny zprávy?');">Smazat</button>
+
     </form>
 </section>
 
@@ -75,7 +68,7 @@
     
     <form method="post" class="form">
 
-        <label for="archivovat" class="custom-label">Port serveru</label>
+        <label class="custom-label">Port serveru</label>
         <small>Pro účinek je třeba restart webové aplikace.</small>
         <input type="number" name="port" class="form-control admin-input my-2" value="{{port}}">
         <button type="submit" name="port_btn" value="whatever" class="btn custom-button mb-5">Uložit</button>

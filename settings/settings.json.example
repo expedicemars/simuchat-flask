@@ -3,10 +3,9 @@
         "example user 1",
         "example user 2"
     ],
-    "pocet_zprav_manual": 200,
-    "pocet_zprav_auto": 50,
     "datetime_zacatku": "2024-11-10T20:00:00",
     "zobrazaovani_pripojeni_adminu": true,
     "port": 8000,
-    "prodleva": 120
+    "prodleva": 120,
+    "last_n": 200
 }

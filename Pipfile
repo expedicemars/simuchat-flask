@@ -10,3 +10,7 @@ get-mac = "*"
 colorama = "*"
 gunicorn = "*"
 eventlet = "*"
+flask-sqlalchemy = "*"
+openpyxl = "*"
+
+[dev-packages]

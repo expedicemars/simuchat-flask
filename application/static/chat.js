@@ -1,9 +1,13 @@
+import http_get from "./http_get.js"
 let socketio = io()
 
+let chat_data = JSON.parse(http_get("/load_chat"))
+let old_messages = chat_data.last_messages
+let prodleva = chat_data.prodleva 
+
 let messages_div = document.getElementById("messages_div")
-let old_messages = JSON.parse(document.getElementById("messages_input").value)
 let message_input = document.getElementById("message")
-let prodleva = document.getElementById("prodleva").value
+
 document.getElementById("odeslat_button").addEventListener("click", sendMessage)
 message_input.addEventListener("keydown", handleKeyPress)
 
@@ -25,25 +29,25 @@ window.onclick = function(event) {
 
 
 old_messages.forEach(element => {
-    createMessage(element.name, element.text, element.time, element.type)
+    createMessage(element.author, element.content, element.pretty_time, element.category)
 });
 
 socketio.on("message", (data) => {
-    createMessage(data.name, data.text, data.time, data.type)
-    if (data.type == "connection") {
+    createMessage(data.author, data.content, data.pretty_time, data.category)
+    if (data.category == "connection") {
     } else {
 
         let current_datetime = new Date()
         let delta = (current_datetime - last_message_datetime) / 1000
         const isDeltaValid = delta > prodleva;
         const isModalInactive = !modal_is_active;
-        const isOrgMessageForNonAdmin = (data.type == "org" && !is_admin);
-        const isPosadkaMessageForAdmin = (data.type == "posadka" && is_admin);
+        const isOrgMessageForNonAdmin = (data.category == "org" && !is_admin);
+        const isPosadkaMessageForAdmin = (data.category == "posadka" && is_admin);
 
         if (isDeltaValid && isModalInactive && (isOrgMessageForNonAdmin || isPosadkaMessageForAdmin)) {
             modal.style.display = "block"
             modal_is_active = true
-            let popup_message = "Zpráva v čase " + data.time + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
+            let popup_message = "Zpráva v čase " + data.datetime + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
             document.getElementById("popup_message").innerText = popup_message
             last_message_datetime = new Date()
         } else {
@@ -52,36 +56,34 @@ socketio.on("message", (data) => {
     }
 })
 
-// TODO tohle spis nefunguje
-socketio.on("archivovani", (data) => {
-    console.log("probehl archivovani")
-    while (messages_div.firstChild && data["pocet"] < messages_div.children.length) {
-        messages_div.removeChild(messages_div.firstChild);
-    }
-})
+function createMessage(author, content, time, category) {
+    let message_div = document.createElement("div")
+    message_div.classList.add("message", `message-${category}`)
 
-function createMessage(name, text, time, type) {
-    let id = "text-" + name + "-" + time
-    let new_message = `
-    <div class="message message-${type}">
-        <span class="name">
-            ${name}
-        </span>
-        <span class="text" id="${id}">${text}
-        </span>
-        <span class="date">
-            ${time}
-        </span>
-    </div>
-    `
-    messages_div.innerHTML += new_message
-    // document.getElementById("text-" + name + "-" + time).innerText = text // kvuli tomu bordelu s newlines
+    let author_span = document.createElement("span")
+    author_span.classList.add("author")
+    author_span.innerText = author
+
+    let content_span = document.createElement("span")
+    content_span.classList.add("content")
+    content_span.innerText = content
+
+    let datetime_span = document.createElement("span")
+    datetime_span.classList.add("datetime")
+    datetime_span.innerText = time
+
+    message_div.appendChild(author_span)
+    message_div.appendChild(content_span)
+    message_div.appendChild(datetime_span)
+
+    messages_div.appendChild(message_div)
+
     messages_div.scrollTop = messages_div.scrollHeight
 }
 
 function sendMessage() {
     if (message_input.value == "") return
-    socketio.emit("message", {text: message_input.value})
+    socketio.emit("message", {content: message_input.value})
     message_input.value = ""
     last_message_datetime = new Date()
     modal.style.display = "none"
@@ -92,7 +94,6 @@ function sendMessage() {
 function handleKeyPress(event) {
     if (event.key == "Enter") {
         if (event.shiftKey) {
-            
         } else {
             sendMessage()
             event.preventDefault()
