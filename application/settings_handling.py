@@ -42,12 +42,12 @@ def get_jmena_posadky_for_admin() -> str:
 
 def get_jmena_posadky_for_user() ->list[str]:
     settings = get_settings()
-    return settings["jmena_posadky"]
+    return [x.strip() for x in settings["jmena_posadky"] if x.strip() != ""]
 
 
 def set_jmena_posadky_from_admin(data) -> None:
     settings = get_settings()
-    settings["jmena_posadky"] = data.split("\n")
+    settings["jmena_posadky"] = [x.strip() for x in data.split("\n") if x.strip() != ""]
     set_settings(settings)
         
         
