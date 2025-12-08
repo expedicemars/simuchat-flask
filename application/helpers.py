@@ -31,3 +31,8 @@ def pretty_cas_zpravy(time: datetime = None) -> str:
     leftover = leftover - minutes*60
     sec = int(leftover)
     return f"{sign}{str(hours).rjust(2, '0')} : {str(minutes).rjust(2, '0')} : {str(sec).rjust(2, '0')}"
+
+
+def get_simulation_start_time() -> str:
+    datetime_zacatku = get_datetime_zacatku()
+    return datetime_zacatku.isoformat()
