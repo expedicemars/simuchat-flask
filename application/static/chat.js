@@ -4,9 +4,11 @@ let socketio = io()
 let chat_data = JSON.parse(http_get("/load_chat"))
 let old_messages = chat_data.last_messages
 let prodleva = chat_data.prodleva 
+let simulation_start_time = chat_data.start_time
 
 let messages_div = document.getElementById("messages_div")
 let message_input = document.getElementById("message")
+let time_span = document.getElementById("time")
 
 document.getElementById("odeslat_button").addEventListener("click", sendMessage)
 message_input.addEventListener("keydown", handleKeyPress)
@@ -100,3 +102,17 @@ function handleKeyPress(event) {
         }
     }
 }
+
+// parse the iso-formatted start time, compute the elapsed time, and update the time span every second
+// the format is hh : mm : ss, when it overflows 24 hours, it continues counting in hours, e.g., 25 : 00 : 00
+let start_datetime = new Date(simulation_start_time)
+setInterval(() => {
+    let current_datetime = new Date()
+    let elapsed_ms = current_datetime - start_datetime
+    let elapsed_sec = Math.floor(elapsed_ms / 1000)
+    let hours = Math.floor(elapsed_sec / 3600)
+    let minutes = Math.floor((elapsed_sec % 3600) / 60)
+    let seconds = elapsed_sec % 60
+    let time_string = String(hours).padStart(2, '0') + " : " + String(minutes).padStart(2, '0') + " : " + String(seconds).padStart(2, '0')
+    time_span.innerText = time_string
+}, 1000)

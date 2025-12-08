@@ -15,6 +15,7 @@ body{
     min-height: fit-content;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .main-admin{

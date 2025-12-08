@@ -3,7 +3,7 @@ from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import getmac
 from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_datetime_zacatku, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva, set_last_n, get_last_n
-from .helpers import get_ip
+from .helpers import get_ip, get_simulation_start_time
 from .settings_handling import ensure_settings
 from datetime import datetime
 import json
@@ -130,7 +130,8 @@ def create_app() -> Flask:
     def get_last_messages():
         result = {
             "prodleva": get_prodleva(),
-            "last_messages": Message.get_history_on_join()
+            "last_messages": Message.get_history_on_join(),
+            "start_time": get_simulation_start_time()
         }
         return json.dumps(result)
               
