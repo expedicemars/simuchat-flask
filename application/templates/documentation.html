@@ -1,27 +1,7 @@
 {% extends "index.html" %}
 {% block content %}
 <section class="border rounded-3 border-dark border-2 main documentation p-3">
-    <h1 class="text-center">Návod pro posádku</h1>
-
-    <p>
-        Po výběru svého jména můžete v chatu komunikovat s organizátory a ostatními členy posádky.
-    </p>
-
-    <h2>Přehled funkcí</h2>
-    <ul>
-        <li>Shift + Enter – odřádkování při psaní jedné zprávy</li>
-        <li>Enter – odeslání zprávy</li>
-        <li>Změna stavu zprávy kliknutím na ní</li>
-        <li>Stav zprávy se mění v pořadí: bez emotikonu → ✅ → 🚨 → bez emotikonu</li>
-        <ol>
-            <li>Bez emotikonu</li>
-            <li>✅ – potvrzeno / dokončeno</li>
-            <li>🚨 – vyžaduje pozornost</li>
-        </ol>
-        <li>Při vstupu do chatu se zobrazí poslední zprávy, je možné načíst starší.</li>
-        <li>Filtr autorů - zaškrtnutím můžete vybrat, které autory zpráv chcete zobrazovat.</li>
-    </ul>
-
+    {{ documentation_html|safe }}
     <a class="documentation-link align-self-center" href="{{url_for('join')}}">
         Zpět na výběr člena
     </a>

@@ -20,6 +20,10 @@
         <textarea name="jmena_posadky", rows="5" class="textarea rounded-3 mb-2">{{jmena_posadky}}</textarea>
         <button type="submit" name="save_names" value="whatever" class="btn custom-button mb-5">Uložit</button>
 
+        <label class="custom-label">Dokumentace pro posádku (HTML)</label>
+        <textarea name="documentation_html" rows="16" class="textarea documentation-input rounded-3 mb-2">{{documentation_html}}</textarea>
+        <button type="submit" name="save_documentation" value="whatever" class="btn custom-button mb-5">Uložit dokumentaci</button>
+
         <label class="custom-label">Nastavit datum a čas začátku simulace</label>
         <small>Zprávy zobrazují čas odeslání relativně k tomuto času</small>
         <input type="number" name="rok" placeholder="rok" value="{{datetime_zacatku.year}}" class="form-control admin-input my-2">

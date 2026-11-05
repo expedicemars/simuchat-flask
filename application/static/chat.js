@@ -110,7 +110,10 @@ socketio.on("message", (data) => {
         if (isDeltaValid && isModalInactive && (isOrgMessageForNonAdmin || isPosadkaMessageForAdmin)) {
             modal.style.display = "block"
             modal_is_active = true
-            let popup_message = "Zpráva v čase " + data.datetime + " přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
+            let message_datetime = new Date(data.datetime)
+            let local_time = String(message_datetime.getHours()).padStart(2, "0")
+                + ":" + String(message_datetime.getMinutes()).padStart(2, "0")
+            let popup_message = "Zpráva v " + local_time + " (simulační čas: " + data.pretty_time + ") přišla o více než " + String(prodleva) + " sekund po předchozí zprávě, proto toto upozornění."
             document.getElementById("popup_message").innerText = popup_message
             last_message_datetime = new Date()
         } else {
