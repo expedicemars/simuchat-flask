@@ -143,24 +143,24 @@ def create_app() -> Flask:
 
     @socketio.on("connect")
     def connect(auth=None):
-        if session.get("admin") and not get_pripojovani():
-            pass
+        is_admin = session.get("admin") or session.get("name", "").endswith("@EMMC")
+        if is_admin and not get_pripojovani():
+            return
         if session.get("mode") == "silent":
-            pass
-        else:
-            m = Message(author=session.get("name"), content="joined.", category="connection")
-            m.save_and_send()
-            
+            return
+        m = Message(author=session.get("name"), content="joined.", category="connection")
+        m.save_and_send()
+
 
     @socketio.on("disconnect")
     def disconnect():
-        if session.get("admin") and not get_pripojovani():
-            pass
+        is_admin = session.get("admin") or session.get("name", "").endswith("@EMMC")
+        if is_admin and not get_pripojovani():
+            return
         if session.get("mode") == "silent":
-            pass
-        else:
-            m = Message(author=session.get("name"), content="disconnected.", category="connection")
-            m.save_and_send()
+            return
+        m = Message(author=session.get("name"), content="disconnected.", category="connection")
+        m.save_and_send()
 
 
     @socketio.on("message")
