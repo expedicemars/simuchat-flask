@@ -111,3 +111,13 @@ def set_last_n(last_n: int) -> None:
     settings = get_settings()
     settings["last_n"] = last_n
     set_settings(settings)
+
+
+def get_documentation_html() -> str:
+    return get_settings()["documentation_html"]
+
+
+def set_documentation_html(documentation_html: str) -> None:
+    settings = get_settings()
+    settings["documentation_html"] = documentation_html
+    set_settings(settings)

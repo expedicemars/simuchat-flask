@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, s
 from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 import getmac
-from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_datetime_zacatku, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva, set_last_n, get_last_n
+from .settings_handling import get_jmena_posadky_for_user, get_jmena_posadky_for_admin, get_datetime_zacatku, set_jmena_posadky_from_admin, set_datetime_zacatku, toggle_pripojovani, get_pripojovani, get_port, set_port, get_prodleva, set_prodleva, set_last_n, get_last_n, get_documentation_html, set_documentation_html
 from .helpers import get_ip, get_simulation_start_time
 from .settings_handling import ensure_settings
 from datetime import datetime
@@ -39,6 +39,11 @@ def create_app() -> Flask:
             if name := request.form.get("name"):
                 session["name"] = f"{name}@posadka"
                 return redirect(url_for("chat"))
+
+
+    @app.route("/documentation")
+    def documentation():
+        return render_template("documentation.html", documentation_html=get_documentation_html())
 
 
     @app.route("/chat")
@@ -78,11 +83,16 @@ def create_app() -> Flask:
                     mac_adress = getmac.get_mac_address(),
                     port = get_port(), 
                     prodleva = get_prodleva(),
-                    last_n = get_last_n()
+                    last_n = get_last_n(),
+                    documentation_html = get_documentation_html()
                 )
         else:
             if request.form.get("save_names"):
                 set_jmena_posadky_from_admin(request.form.get("jmena_posadky"))
+                return redirect(url_for("admin"))
+
+            elif request.form.get("save_documentation"):
+                set_documentation_html(request.form.get("documentation_html", ""))
                 return redirect(url_for("admin"))
             
             elif mode := request.form.get("connect_admin"):
@@ -128,12 +138,31 @@ def create_app() -> Flask:
     
     @app.route("/load_chat")
     def get_last_messages():
+        messages = Message.get_history_on_join()
         result = {
             "prodleva": get_prodleva(),
-            "last_messages": Message.get_history_on_join(),
+            "last_messages": messages,
+            "has_older_messages": bool(messages) and Message.has_before(messages[0]["id"]),
             "start_time": get_simulation_start_time()
         }
         return json.dumps(result)
+
+
+    @app.route("/load_older_messages")
+    def get_older_messages():
+        before_id = request.args.get("before_id", type=int)
+        if before_id is None:
+            return {"error": "before_id is required"}, 400
+
+        limit = get_last_n()
+        messages = Message.get_before(before_id, limit + 1)
+        has_older_messages = len(messages) > limit
+        if has_older_messages:
+            messages = messages[1:]
+        return {
+            "messages": Message.messages_as_dict(messages),
+            "has_older_messages": has_older_messages
+        }
               
 
     @app.errorhandler(404)
@@ -143,24 +172,24 @@ def create_app() -> Flask:
 
     @socketio.on("connect")
     def connect(auth=None):
-        if session.get("admin") and not get_pripojovani():
-            pass
+        is_admin = session.get("admin") or session.get("name", "").endswith("@EMMC")
+        if is_admin and not get_pripojovani():
+            return
         if session.get("mode") == "silent":
-            pass
-        else:
-            m = Message(author=session.get("name"), content="joined.", category="connection")
-            m.save_and_send()
-            
+            return
+        m = Message(author=session.get("name"), content="joined.", category="connection")
+        m.save_and_send()
+
 
     @socketio.on("disconnect")
     def disconnect():
-        if session.get("admin") and not get_pripojovani():
-            pass
+        is_admin = session.get("admin") or session.get("name", "").endswith("@EMMC")
+        if is_admin and not get_pripojovani():
+            return
         if session.get("mode") == "silent":
-            pass
-        else:
-            m = Message(author=session.get("name"), content="disconnected.", category="connection")
-            m.save_and_send()
+            return
+        m = Message(author=session.get("name"), content="disconnected.", category="connection")
+        m.save_and_send()
 
 
     @socketio.on("message")
@@ -169,6 +198,25 @@ def create_app() -> Flask:
         category = "org" if session.get("admin") else "posadka"
         m = Message(author=session.get("name"), content=content, category=category)
         m.save_and_send()
+
+
+    @socketio.on("message_status")
+    def message_status(data):
+        message_id = data.get("message_id")
+        status = data.get("status")
+        if status not in {"none", "alert", "done"}:
+            return
+
+        message = db.session.get(Message, message_id)
+        if message is None:
+            return
+
+        message.status = status
+        db.session.commit()
+        socketio.emit("message_status", {
+            "message_id": message.id,
+            "status": message.status
+        })
 
     return app
 
