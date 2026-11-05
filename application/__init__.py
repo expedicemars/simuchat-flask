@@ -199,7 +199,7 @@ def create_app() -> Flask:
     def message_status(data):
         message_id = data.get("message_id")
         status = data.get("status")
-        if status not in {"none", "acknowledged", "alert"}:
+        if status not in {"none", "alert", "done"}:
             return
 
         message = db.session.get(Message, message_id)

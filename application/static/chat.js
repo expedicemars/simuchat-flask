@@ -133,9 +133,9 @@ function createMessage(id, author, content, time, category, status = "none", pre
     message_div.dataset.status = status
     message_div.addEventListener("click", () => {
         let next_status = {
-            none: "acknowledged",
-            acknowledged: "alert",
-            alert: "none"
+            none: "alert",
+            alert: "done",
+            done: "none"
         }[message_div.dataset.status]
         socketio.emit("message_status", {
             message_id: id,
@@ -182,8 +182,8 @@ function updateMessageStatus(id, status) {
     message_div.dataset.status = status
     message_div.querySelector(".message-status").innerText = {
         none: "",
-        acknowledged: "✅",
-        alert: "🚨"
+        alert: "🚨",
+        done: "✅"
     }[status] || ""
 }
 
