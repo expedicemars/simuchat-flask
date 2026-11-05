@@ -79,6 +79,30 @@ body{
 .chat-message-input {
     min-width: 0;
 }
+.documentation {
+    max-width: 48rem;
+    margin: 0 auto;
+}
+.documentation h2 {
+    margin-top: 1.5rem;
+    color: #FFA52E;
+    font-size: 1.25rem;
+}
+.documentation p,
+.documentation li {
+    color: #FFA52E;
+    font-weight: bold;
+}
+.documentation-link {
+    color: #B65900;
+    font-weight: bold;
+    text-decoration: none;
+}
+.documentation-link:hover,
+.documentation-link:focus {
+    color: #B65900;
+    text-decoration: underline;
+}
 h1{
     font-weight: bold;
 }
@@ -120,6 +144,7 @@ h1{
 
 .message{
     display: flex;
+    cursor: pointer;
 }
 .message .author{
     margin-right: 1rem;
@@ -133,6 +158,11 @@ h1{
 .message .datetime{
     margin-left: auto;
     white-space: nowrap;
+}
+.message-status {
+    margin-left: .5rem;
+    min-width: 1.5rem;
+    text-align: center;
 }
 .message-connection{
     color: green;

@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+{% block content %}
+<section class="border rounded-3 border-dark border-2 main documentation p-3">
+    <h1 class="text-center">Návod pro posádku</h1>
+
+    <p>
+        Po výběru svého jména můžete v chatu komunikovat s organizátory
+        a ostatními členy posádky.
+    </p>
+
+    <h2>Odesílání zpráv</h2>
+    <p>
+        Napište zprávu do textového pole a klikněte na <strong>Odeslat</strong>.
+        Zprávu lze odeslat také klávesou Enter. Pro nový řádek použijte
+        Shift + Enter.
+    </p>
+
+    <h2>Stav zprávy</h2>
+    <p>
+        Kliknutím na zprávu můžete měnit její stav:
+    </p>
+    <ul>
+        <li>bez emoji – nový stav,</li>
+        <li>✅ – zpráva byla zaznamenána,</li>
+        <li>🚨 – zpráva vyžaduje pozornost.</li>
+    </ul>
+    <p>
+        Změna stavu se zobrazí všem připojeným uživatelům. Dalším kliknutím
+        se stav vrátí na začátek.
+    </p>
+
+    <h2>Starší zprávy</h2>
+    <p>
+        Tlačítkem <strong>Načíst starší zprávy</strong> zobrazíte další starší
+        část historie. Tlačítko se vypne, jakmile už žádné starší zprávy nejsou.
+    </p>
+
+    <h2>Filtr autorů</h2>
+    <p>
+        V nabídce <strong>Filtrovat autory</strong> můžete zaškrtnout, které
+        autory chcete zobrazovat. Filtr ovlivňuje pouze vaše zobrazení chatu;
+        ostatní uživatelé ho nevidí.
+    </p>
+
+    <a class="documentation-link align-self-center" href="{{url_for('join')}}">
+        Zpět na výběr člena
+    </a>
+</section>
+{% endblock %}

@@ -42,7 +42,7 @@ window.onclick = function(event) {
 
 
 old_messages.forEach(element => {
-    createMessage(element.author, element.content, element.pretty_time, element.category)
+    createMessage(element.id, element.author, element.content, element.pretty_time, element.category, element.status)
 });
 
 function toggleAuthorFilter() {
@@ -85,7 +85,7 @@ function loadOlderMessages() {
     let response = JSON.parse(http_get("/load_older_messages?before_id=" + oldest_message_id))
     let previous_scroll_height = messages_div.scrollHeight
     response.messages.forEach(element => {
-        createMessage(element.author, element.content, element.pretty_time, element.category, true)
+        createMessage(element.id, element.author, element.content, element.pretty_time, element.category, element.status, true)
     })
     if (response.messages.length > 0) {
         oldest_message_id = response.messages[0].id
@@ -96,7 +96,7 @@ function loadOlderMessages() {
 }
 
 socketio.on("message", (data) => {
-    createMessage(data.author, data.content, data.pretty_time, data.category)
+    createMessage(data.id, data.author, data.content, data.pretty_time, data.category, data.status)
     if (data.category == "connection") {
     } else {
 
@@ -119,12 +119,29 @@ socketio.on("message", (data) => {
     }
 })
 
-function createMessage(author, content, time, category, prepend = false) {
+socketio.on("message_status", (data) => {
+    updateMessageStatus(data.message_id, data.status)
+})
+
+function createMessage(id, author, content, time, category, status = "none", prepend = false) {
     addAuthorToFilter(author)
 
     let message_div = document.createElement("div")
     message_div.classList.add("message", `message-${category}`)
+    message_div.dataset.messageId = id
     message_div.dataset.author = author
+    message_div.dataset.status = status
+    message_div.addEventListener("click", () => {
+        let next_status = {
+            none: "acknowledged",
+            acknowledged: "alert",
+            alert: "none"
+        }[message_div.dataset.status]
+        socketio.emit("message_status", {
+            message_id: id,
+            status: next_status
+        })
+    })
 
     let author_span = document.createElement("span")
     author_span.classList.add("author")
@@ -141,16 +158,33 @@ function createMessage(author, content, time, category, prepend = false) {
     message_div.appendChild(author_span)
     message_div.appendChild(content_span)
     message_div.appendChild(datetime_span)
+    let status_span = document.createElement("span")
+    status_span.classList.add("message-status")
+    message_div.appendChild(status_span)
 
     if (prepend && messages_div.firstChild) {
         messages_div.insertBefore(message_div, messages_div.firstChild)
     } else {
         messages_div.appendChild(message_div)
     }
+    updateMessageStatus(id, status)
 
     if (!prepend) {
         messages_div.scrollTop = messages_div.scrollHeight
     }
+}
+
+function updateMessageStatus(id, status) {
+    let message_div = Array.from(messages_div.querySelectorAll(".message"))
+        .find(message => String(message.dataset.messageId) === String(id))
+    if (!message_div) return
+
+    message_div.dataset.status = status
+    message_div.querySelector(".message-status").innerText = {
+        none: "",
+        acknowledged: "✅",
+        alert: "🚨"
+    }[status] || ""
 }
 
 function sendMessage() {

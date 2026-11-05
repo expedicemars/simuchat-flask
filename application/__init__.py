@@ -41,6 +41,11 @@ def create_app() -> Flask:
                 return redirect(url_for("chat"))
 
 
+    @app.route("/documentation")
+    def documentation():
+        return render_template("documentation.html")
+
+
     @app.route("/chat")
     def chat():
         if not session.get("name"):
@@ -188,6 +193,25 @@ def create_app() -> Flask:
         category = "org" if session.get("admin") else "posadka"
         m = Message(author=session.get("name"), content=content, category=category)
         m.save_and_send()
+
+
+    @socketio.on("message_status")
+    def message_status(data):
+        message_id = data.get("message_id")
+        status = data.get("status")
+        if status not in {"none", "acknowledged", "alert"}:
+            return
+
+        message = db.session.get(Message, message_id)
+        if message is None:
+            return
+
+        message.status = status
+        db.session.commit()
+        socketio.emit("message_status", {
+            "message_id": message.id,
+            "status": message.status
+        })
 
     return app
 

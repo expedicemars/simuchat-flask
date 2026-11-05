@@ -14,15 +14,18 @@ class Message(db.Model):
     datetime = db.Column(db.DateTime, default=datetime.now)
     author = db.Column(db.String(100))
     category = db.Column(db.String(50)) # posadka, org, connection
+    status = db.Column(db.String(20), nullable=False, default="none")
 
     
     def as_dict(self) -> dict:
         as_dict = {
+            "id": self.id,
             "author": self.author,
             "content": self.content,
             "datetime": self.datetime.isoformat(),
             "pretty_time": pretty_cas_zpravy(self.datetime),
-            "category": self.category
+            "category": self.category,
+            "status": self.status
         }
         return as_dict
 
@@ -72,7 +75,6 @@ class Message(db.Model):
         result = []
         for message in messages:
             m = message.as_dict()
-            m["id"] = message.id
             m["time"] = pretty_cas_zpravy(message.datetime)
             result.append(m)
         return result
@@ -94,11 +96,18 @@ class Message(db.Model):
         ws.title = "messages"
 
         # Write header
-        ws.append(["id", "category", "datetime", "author", "content"])
+        ws.append(["id", "category", "datetime", "author", "content", "status"])
 
         # Write data rows
         for message in messages:
-            ws.append([message.id, message.category, message.datetime, message.author, message.content])
+            ws.append([
+                message.id,
+                message.category,
+                message.datetime,
+                message.author,
+                message.content,
+                message.status
+            ])
 
         # Save workbook to a BytesIO stream and return it
         xlsx_stream = BytesIO()
