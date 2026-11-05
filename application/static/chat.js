@@ -12,11 +12,17 @@ let messages_div = document.getElementById("messages_div")
 let message_input = document.getElementById("message")
 let time_span = document.getElementById("time")
 let older_messages_button = document.getElementById("older_messages_button")
+let author_filter_button = document.getElementById("author_filter_button")
+let author_filter_panel = document.getElementById("author_filter_panel")
+let visible_authors = new Set()
 
 document.getElementById("odeslat_button").addEventListener("click", sendMessage)
 message_input.addEventListener("keydown", handleKeyPress)
 older_messages_button.addEventListener("click", loadOlderMessages)
 older_messages_button.disabled = !has_older_messages
+if (author_filter_button && author_filter_panel) {
+    author_filter_button.addEventListener("click", toggleAuthorFilter)
+}
 
 let last_message_datetime = new Date()
 let modal_is_active = false
@@ -38,6 +44,40 @@ window.onclick = function(event) {
 old_messages.forEach(element => {
     createMessage(element.author, element.content, element.pretty_time, element.category)
 });
+
+function toggleAuthorFilter() {
+    let is_open = !author_filter_panel.hidden
+    author_filter_panel.hidden = is_open
+    author_filter_button.setAttribute("aria-expanded", String(!is_open))
+}
+
+function addAuthorToFilter(author) {
+    if (!author_filter_panel || visible_authors.has(author)) return
+    visible_authors.add(author)
+
+    let label = document.createElement("label")
+    label.classList.add("author-filter-option")
+
+    let checkbox = document.createElement("input")
+    checkbox.type = "checkbox"
+    checkbox.checked = true
+    checkbox.value = author
+    checkbox.addEventListener("change", applyAuthorFilter)
+
+    label.appendChild(checkbox)
+    label.appendChild(document.createTextNode(` ${author}`))
+    author_filter_panel.appendChild(label)
+}
+
+function applyAuthorFilter() {
+    let selected_authors = new Set(
+        Array.from(author_filter_panel.querySelectorAll("input:checked"))
+            .map(checkbox => checkbox.value)
+    )
+    messages_div.querySelectorAll(".message").forEach(message => {
+        message.hidden = !selected_authors.has(message.dataset.author)
+    })
+}
 
 function loadOlderMessages() {
     if (!has_older_messages || oldest_message_id === null) return
@@ -80,8 +120,11 @@ socketio.on("message", (data) => {
 })
 
 function createMessage(author, content, time, category, prepend = false) {
+    addAuthorToFilter(author)
+
     let message_div = document.createElement("div")
     message_div.classList.add("message", `message-${category}`)
+    message_div.dataset.author = author
 
     let author_span = document.createElement("span")
     author_span.classList.add("author")

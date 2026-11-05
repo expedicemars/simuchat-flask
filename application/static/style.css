@@ -9,6 +9,9 @@ body{
     min-height: fit-content;
     font-family: 'Courier New', Courier, monospace;
 }
+.page-body {
+    padding: 1.5rem;
+}
 
 .main{
     background-color: black;
@@ -28,6 +31,53 @@ body{
     background-color: #B65900;
     min-width: 150px;
     font-weight: bold;
+}
+.chat-tools {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: .75rem;
+}
+.author-filter {
+    position: relative;
+}
+.author-filter-panel {
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    padding: .75rem;
+    background-color: #272727;
+    border: 1px solid #B65900;
+    text-align: left;
+}
+.author-filter-option {
+    display: block;
+    color: #FFA52E;
+    font-weight: bold;
+    white-space: nowrap;
+}
+.chat-composer {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .75rem;
+}
+.chat-action {
+    min-width: 0;
+}
+.chat-action .custom-button,
+.chat-action a {
+    display: block;
+    width: 100%;
+}
+.chat-action a {
+    text-decoration: none;
+}
+.chat-message-input {
+    min-width: 0;
 }
 h1{
     font-weight: bold;
@@ -154,6 +204,58 @@ h1{
 
 /* --- BREAKPOINT --- */
 @media (max-width: 550px) {
+    body {
+        padding: 0;
+    }
+
+    .main {
+        padding: .75rem !important;
+    }
+
+    .chat-tools {
+        gap: .5rem;
+        margin-bottom: .5rem;
+    }
+
+    .chat-tools > button,
+    .chat-tools > .author-filter {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .chat-tools .custom-button {
+        width: 100%;
+        min-width: 0;
+        padding-left: .25rem;
+        padding-right: .25rem;
+    }
+
+    .chat-composer {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: .5rem;
+    }
+
+    .chat-message-input {
+        grid-column: 1 / -1;
+        order: -1;
+        width: 100%;
+        max-width: none;
+        padding: 0;
+    }
+
+    .chat-action {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        display: block;
+    }
+
+    .chat-action .custom-button,
+    .chat-action a {
+        width: 100%;
+    }
+
     .message {
         flex-wrap: wrap;        /* allow items to go to second row */
         align-items: flex-start;
@@ -179,38 +281,14 @@ h1{
 }
 
 @media (max-width: 900px) {
-    .inputs.row {
-        flex-wrap: wrap;          /* allow wrapping */
+    .page-body {
+        padding: 0;
     }
 
-    /* textarea = 1. řádek, plná šířka */
-    .inputs .col {
-        order: 0;
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-    }
-
-    /* každý button sloupec = 50 % šířky (2. řádek) */
-    .inputs .col-auto {
-        order: 1;
-        flex: 0 0 50%;
-        max-width: 50%;
-        display: flex;
-        justify-content: center;
-    }
-
-    /* a + button natáhnout na plnou šířku svého 50% sloupce */
-    .inputs .col-auto a {
-        display: flex;
-        flex: 1 1 auto;
-        text-decoration: none;
-    }
-
-    .inputs .col-auto .custom-button {
+    .main {
         width: 100%;
-        min-width: unset;
-        margin-top: 0.5rem;
+        margin: 0;
+        box-sizing: border-box;
     }
+
 }

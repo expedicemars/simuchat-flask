@@ -10,13 +10,21 @@
             Starší zprávy jsou uloženy na Zemi. Simulační čas: <span id="time"></span>
         </small>
     </div>
-    <button id="older_messages_button" class="btn custom-button align-self-center" type="button">
-        Načíst starší zprávy
-    </button>
+    <div class="chat-tools">
+        <button id="older_messages_button" class="btn custom-button" type="button">
+            Načíst starší zprávy
+        </button>
+        <div class="author-filter">
+            <button id="author_filter_button" class="btn custom-button" type="button" aria-expanded="false">
+                Filtrovat autory
+            </button>
+            <div id="author_filter_panel" class="author-filter-panel" hidden></div>
+        </div>
+    </div>
     <div id="messages_div" class="messages rounded-3 my-3">
     </div>
-    <div class="inputs row">
-        <div class="col-auto">
+    <div class="chat-composer">
+        <div class="chat-action">
             {% if is_admin %}
                 <a href="/admin">
                     <button class="btn custom-button" type="button">Zpět do admin sekce</button>
@@ -27,14 +35,14 @@
                 </a>
             {% endif %}
         </div>
-        <div class="col">
+        <div class="chat-message-input">
             {% if is_admin %}
                 <textarea id="message" class="form-control chat-input chat-input-org" rows="3"></textarea>
             {% else %}
                 <textarea id="message" class="form-control chat-input chat-input-posadka" rows="3"></textarea>
             {% endif %}
         </div>
-        <div class="col-auto">
+        <div class="chat-action">
             <button id="odeslat_button" class="btn custom-button">Odeslat</button>
         </div>
     </div>
