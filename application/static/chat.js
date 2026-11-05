@@ -5,13 +5,18 @@ let chat_data = JSON.parse(http_get("/load_chat"))
 let old_messages = chat_data.last_messages
 let prodleva = chat_data.prodleva 
 let simulation_start_time = chat_data.start_time
+let has_older_messages = chat_data.has_older_messages
+let oldest_message_id = old_messages.length > 0 ? old_messages[0].id : null
 
 let messages_div = document.getElementById("messages_div")
 let message_input = document.getElementById("message")
 let time_span = document.getElementById("time")
+let older_messages_button = document.getElementById("older_messages_button")
 
 document.getElementById("odeslat_button").addEventListener("click", sendMessage)
 message_input.addEventListener("keydown", handleKeyPress)
+older_messages_button.addEventListener("click", loadOlderMessages)
+older_messages_button.disabled = !has_older_messages
 
 let last_message_datetime = new Date()
 let modal_is_active = false
@@ -33,6 +38,22 @@ window.onclick = function(event) {
 old_messages.forEach(element => {
     createMessage(element.author, element.content, element.pretty_time, element.category)
 });
+
+function loadOlderMessages() {
+    if (!has_older_messages || oldest_message_id === null) return
+
+    let response = JSON.parse(http_get("/load_older_messages?before_id=" + oldest_message_id))
+    let previous_scroll_height = messages_div.scrollHeight
+    response.messages.forEach(element => {
+        createMessage(element.author, element.content, element.pretty_time, element.category, true)
+    })
+    if (response.messages.length > 0) {
+        oldest_message_id = response.messages[0].id
+        messages_div.scrollTop += messages_div.scrollHeight - previous_scroll_height
+    }
+    has_older_messages = response.has_older_messages
+    older_messages_button.disabled = !has_older_messages
+}
 
 socketio.on("message", (data) => {
     createMessage(data.author, data.content, data.pretty_time, data.category)
@@ -58,7 +79,7 @@ socketio.on("message", (data) => {
     }
 })
 
-function createMessage(author, content, time, category) {
+function createMessage(author, content, time, category, prepend = false) {
     let message_div = document.createElement("div")
     message_div.classList.add("message", `message-${category}`)
 
@@ -78,9 +99,15 @@ function createMessage(author, content, time, category) {
     message_div.appendChild(content_span)
     message_div.appendChild(datetime_span)
 
-    messages_div.appendChild(message_div)
+    if (prepend && messages_div.firstChild) {
+        messages_div.insertBefore(message_div, messages_div.firstChild)
+    } else {
+        messages_div.appendChild(message_div)
+    }
 
-    messages_div.scrollTop = messages_div.scrollHeight
+    if (!prepend) {
+        messages_div.scrollTop = messages_div.scrollHeight
+    }
 }
 
 function sendMessage() {

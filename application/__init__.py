@@ -128,12 +128,31 @@ def create_app() -> Flask:
     
     @app.route("/load_chat")
     def get_last_messages():
+        messages = Message.get_history_on_join()
         result = {
             "prodleva": get_prodleva(),
-            "last_messages": Message.get_history_on_join(),
+            "last_messages": messages,
+            "has_older_messages": bool(messages) and Message.has_before(messages[0]["id"]),
             "start_time": get_simulation_start_time()
         }
         return json.dumps(result)
+
+
+    @app.route("/load_older_messages")
+    def get_older_messages():
+        before_id = request.args.get("before_id", type=int)
+        if before_id is None:
+            return {"error": "before_id is required"}, 400
+
+        limit = get_last_n()
+        messages = Message.get_before(before_id, limit + 1)
+        has_older_messages = len(messages) > limit
+        if has_older_messages:
+            messages = messages[1:]
+        return {
+            "messages": Message.messages_as_dict(messages),
+            "has_older_messages": has_older_messages
+        }
               
 
     @app.errorhandler(404)

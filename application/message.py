@@ -41,19 +41,48 @@ class Message(db.Model):
     def get_history_on_join() -> list[dict]:
 
         last_n = get_last_n()
-        messages = Message.get_all()[-last_n:]
+        messages = Message.get_before(None, last_n)
+        return Message.messages_as_dict(messages)
+
+
+    @staticmethod
+    def get_before(before_id: int | None, limit: int) -> list["Message"]:
+        query = db.select(Message).order_by(Message.id.desc()).limit(limit)
+        if before_id is not None:
+            query = (
+                db.select(Message)
+                .where(Message.id < before_id)
+                .order_by(Message.id.desc())
+                .limit(limit)
+            )
+        return list(reversed(db.session.scalars(query).all()))
+
+
+    @staticmethod
+    def has_before(before_id: int) -> bool:
+        return db.session.scalar(
+            db.select(Message.id)
+            .where(Message.id < before_id)
+            .limit(1)
+        ) is not None
+
+
+    @staticmethod
+    def messages_as_dict(messages: list["Message"]) -> list[dict]:
         result = []
         for message in messages:
             m = message.as_dict()
+            m["id"] = message.id
             m["time"] = pretty_cas_zpravy(message.datetime)
             result.append(m)
-        
         return result
 
 
     @staticmethod
     def get_all() -> list["Message"]:
-        return db.session.scalars(db.select(Message)).all()
+        return db.session.scalars(
+            db.select(Message).order_by(Message.id)
+        ).all()
     
     
     @staticmethod
