@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% block content %}
-<section class="border rounded-3 border-dark border-2 main documentation p-3">
+<link rel="stylesheet" href="{{ url_for('static', filename='documentation.css') }}">
+<section class="border rounded-3 border-dark border-2 main p-3">
     {{ documentation_html|safe }}
     <a class="documentation-link align-self-center" href="{{url_for('join')}}">
         Zpět na výběr člena
