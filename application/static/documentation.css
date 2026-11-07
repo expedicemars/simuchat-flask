@@ -1,0 +1,23 @@
+h1{
+    color: #ababab;
+}
+p{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+h2{
+    color: #ababab;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+li{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+em{
+    color: #ababab;
+    font-style: normal;
+}
