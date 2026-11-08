@@ -5,6 +5,7 @@ let chat_data = JSON.parse(http_get("/load_chat"))
 let old_messages = chat_data.last_messages
 let prodleva = chat_data.prodleva 
 let simulation_start_time = chat_data.start_time
+let simulation_server_time = chat_data.server_time
 let has_older_messages = chat_data.has_older_messages
 let oldest_message_id = old_messages.length > 0 ? old_messages[0].id : null
 
@@ -213,10 +214,10 @@ function handleKeyPress(event) {
 // parse the iso-formatted start time, compute the elapsed time, and update the time span every second
 // the format is hh : mm : ss, when it overflows 24 hours, it continues counting in hours, e.g., 25 : 00 : 00
 let start_datetime = new Date(simulation_start_time)
+let elapsed_at_load_ms = new Date(simulation_server_time) - start_datetime
+let clock_started_at = performance.now()
 setInterval(() => {
-    let current_datetime = new Date()
-    let elapsed_ms = current_datetime - start_datetime
-    let elapsed_sec = Math.floor(elapsed_ms / 1000)
+    let elapsed_sec = Math.floor((elapsed_at_load_ms + performance.now() - clock_started_at) / 1000)
     let hours = Math.floor(elapsed_sec / 3600)
     let minutes = Math.floor((elapsed_sec % 3600) / 60)
     let seconds = elapsed_sec % 60
