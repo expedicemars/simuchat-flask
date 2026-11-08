@@ -218,9 +218,11 @@ let elapsed_at_load_ms = new Date(simulation_server_time) - start_datetime
 let clock_started_at = performance.now()
 setInterval(() => {
     let elapsed_sec = Math.floor((elapsed_at_load_ms + performance.now() - clock_started_at) / 1000)
+    let sign = elapsed_sec < 0 ? "- " : ""
+    elapsed_sec = Math.abs(elapsed_sec)
     let hours = Math.floor(elapsed_sec / 3600)
     let minutes = Math.floor((elapsed_sec % 3600) / 60)
     let seconds = elapsed_sec % 60
-    let time_string = String(hours).padStart(2, '0') + " : " + String(minutes).padStart(2, '0') + " : " + String(seconds).padStart(2, '0')
+    let time_string = sign + String(hours).padStart(2, '0') + " : " + String(minutes).padStart(2, '0') + " : " + String(seconds).padStart(2, '0')
     time_span.innerText = time_string
 }, 1000)

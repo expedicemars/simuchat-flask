@@ -39,6 +39,8 @@ Nemám windows, prosím odzkoušet a doplnit sem / říct Pípovi
     - cd path/to/cloned/folder
     - `docker compose up -d --build`
 
+Aplikace používá místní čas serveru. Docker image je nastavený na `Europe/Prague`; při spuštění mimo Docker musí být místní časové pásmo nastavené na hostitelském systému.
+
 ## Použité technologie
 
 - Flask

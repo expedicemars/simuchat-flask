@@ -16,6 +16,9 @@
 # syntax=docker/dockerfile:1.4
 FROM --platform=$BUILDPLATFORM python:3.10-alpine AS builder
 
+RUN apk add --no-cache tzdata
+ENV TZ=Europe/Prague
+
 WORKDIR /simuchat
 
 COPY requirements.txt .
