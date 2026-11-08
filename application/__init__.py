@@ -143,7 +143,8 @@ def create_app() -> Flask:
             "prodleva": get_prodleva(),
             "last_messages": messages,
             "has_older_messages": bool(messages) and Message.has_before(messages[0]["id"]),
-            "start_time": get_simulation_start_time()
+            "start_time": get_simulation_start_time(),
+            "server_time": datetime.now().isoformat()
         }
         return json.dumps(result)
 
