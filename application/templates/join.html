@@ -4,14 +4,13 @@
 
     <h1 class="heading" title="Expedice Mars Mission Control">EMMC komunikace</h1>
 
+    <form method="post" class="crew-selection">
+        {% for name in jmena_posadky %}
+        <button class="btn custom-button crew-button" value="{{name}}" name="name">{{name}}</button>
+        {% endfor %}
+    </form>
     <a class="documentation-link align-self-center mt-3" href="{{url_for('documentation')}}">
         Návod pro posádku
     </a>
-    <p class="join-as">připojit se jako:</p>
-    <form method="post" class="crew-selection">
-        {% for name in jmena_posadky %}
-            <button class="btn custom-button crew-button" value="{{name}}" name="name">{{name}}</button>
-        {% endfor %}
-    </form>
 </section>
 {% endblock %}

@@ -109,9 +109,6 @@ body{
 h1{
     font-weight: bold;
 }
-.join-as{
-    font-weight: bold;
-}
 .crew-selection {
     display: flex;
     flex-wrap: wrap;
