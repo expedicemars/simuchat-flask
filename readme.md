@@ -37,7 +37,7 @@ Nemám windows, prosím odzkoušet a doplnit sem / říct Pípovi
 2. clone tohoto repa někam do složky
 3. v terminálu:
     - cd path/to/cloned/folder
-    - sudo docker-compose up -d --build
+    - `docker compose up -d --build`
 
 ## Použité technologie
 
