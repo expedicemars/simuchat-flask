@@ -112,6 +112,20 @@ h1{
 .join-as{
     font-weight: bold;
 }
+.crew-selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .75rem;
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto;
+}
+.crew-button {
+    flex: 0 0 calc((100% - 2.25rem) / 4);
+    min-width: 0;
+    white-space: normal;
+}
 
 .messages{
     background-color: #272727;
@@ -329,6 +343,16 @@ h1{
         width: 100%;
         margin: 0;
         box-sizing: border-box;
+    }
+
+    .crew-button {
+        flex-basis: calc((100% - 1.5rem) / 3);
+    }
+}
+
+@media (max-width: 550px) {
+    .crew-button {
+        flex-basis: calc((100% - .75rem) / 2);
     }
 
 }
