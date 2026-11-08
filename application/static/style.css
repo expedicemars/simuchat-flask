@@ -1,24 +1,27 @@
 html{
-    height: 100%;
+    min-height: 100%;
 }
 
 body{
+    min-height: 100vh;
+    margin: 0;
     background-color: #B65900;
     color: #B65900;
-    height: 100%;
-    min-height: fit-content;
     font-family: 'Courier New', Courier, monospace;
 }
 .page-body {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .main{
     background-color: black;
-    min-height: fit-content;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: 0;
 }
 
 .main-admin{
