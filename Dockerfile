@@ -26,7 +26,7 @@ COPY . .
 
 ENTRYPOINT ["python3"]
 # CMD ["main.py"]
-CMD ["-m","gunicorn","--worker-class", "eventlet", "-w", "1", "--access-logfile", "-", "-b", "0.0.0.0:8000", "application:app"]
+CMD ["-m","gunicorn","--worker-class", "eventlet", "-w", "1", "--access-logfile", "-", "-b", "0.0.0.0:8000", "application:create_app()"]
 
 FROM builder as dev-envs
 
