@@ -100,6 +100,7 @@ body{
     color: #B65900;
     font-weight: bold;
     text-decoration: none;
+    margin-bottom: 1rem;
 }
 .documentation-link:hover,
 .documentation-link:focus {
@@ -107,9 +108,6 @@ body{
     text-decoration: underline;
 }
 h1{
-    font-weight: bold;
-}
-.join-as{
     font-weight: bold;
 }
 .crew-selection {
