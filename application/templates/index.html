@@ -11,7 +11,7 @@
     <script type="module" src="{{url_for('static', filename='http_get.js')}}"></script>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico')}}">
 </head>
-<body class="page-body">
+<body class="{% block body_class %}page-body{% endblock %}">
     {% block content %}
     {% endblock %}
 </body>
